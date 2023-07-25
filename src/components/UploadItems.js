@@ -122,7 +122,7 @@ class UploadItems extends React.Component {
             multiple={true}
           />
         </Form.Item>
-        <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
+        <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 11 }}>
           <Button type="primary" htmlType="submit" loading={this.state.loading}>
             Submit
           </Button>
