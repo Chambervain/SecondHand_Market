@@ -44,7 +44,7 @@ export const getAllItems = () => {
   });
 };
 
-export const getItemById = () => {
+export const getItemById = (itemId) => {
   const authToken = localStorage.getItem("authToken");
   const listItemUrl = `${domain}/item/${itemId}`;
 
@@ -77,7 +77,7 @@ export const deleteItem = (itemId) => {
   });
 };
 
-export const modifyItem = (data) => {
+export const modifyItem = (data, itemId) => {
   const authToken = localStorage.getItem("authToken");
   const modifyItemUrl = `${domain}/item/${itemId}`;
 

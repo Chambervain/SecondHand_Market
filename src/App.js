@@ -1,8 +1,9 @@
 import { useState } from "react";
 import "./App.css";
-import { Button, Dropdown, Layout, Space } from "antd";
+import { Button, Dropdown, Layout, Space, Upload } from "antd";
 import { Tabs } from "antd";
 import { UserOutlined } from "@ant-design/icons";
+import UploadItems from "./components/UploadItems";
 
 const { Header, Content } = Layout;
 
@@ -21,7 +22,7 @@ function App() {
             Content of Tab Pane 2
           </Tabs.TabPane>
           <Tabs.TabPane tab="Upload Item" key="3">
-            Content of Tab Pane 3
+            <UploadItems />
           </Tabs.TabPane>
         </Tabs>
       );
