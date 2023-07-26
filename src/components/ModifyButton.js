@@ -1,7 +1,8 @@
-import { Button } from "antd";
+import { Button, Modal } from "antd";
+import { useState } from "react";
 import ModificationForm from "./ModificationForm";
 
-const ModifyButton = () => {
+const ModifyButton = ({ itemId }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const openModal = () => {
@@ -14,15 +15,17 @@ const ModifyButton = () => {
       </Button>
       {modalVisible && (
         <Modal
-          title={modalTitle}
+          title="Modify"
           centered={true}
           visible={modalVisible}
-          closable={false}
+          closable={true}
           footer={null}
-          onCancel={this.handleCancel}
+          onCancel={() => {
+            setModalVisible(false);
+          }}
           destroyOnClose={true}
         >
-          <ModificationForm />
+          <ModificationForm itemId={itemId} />
         </Modal>
       )}
     </>

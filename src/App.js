@@ -5,12 +5,13 @@ import { Tabs } from "antd";
 import UploadItems from "./components/UploadItems";
 import LoginPage from "./components/LoginPage";
 import HomeHeaderComponent from "./components/HeaderComponent";
+import MyOwnItems from "./components/MyOwnItem";
 
 const { Content } = Layout;
 
 function App() {
   // Here, Set authed state to be true in order to display Tab component, cuz there is no async function so far
-  const [authed, setAuthed] = useState(false);
+  const [authed, setAuthed] = useState(true);
 
   const handleLoginSuccess = (token) => {
     localStorage.setItem("authToken", token);
@@ -25,7 +26,7 @@ function App() {
             Content of Tab Pane 1
           </Tabs.TabPane>
           <Tabs.TabPane tab="My Items" key="2">
-            Content of Tab Pane 2
+            <MyOwnItems />
           </Tabs.TabPane>
           <Tabs.TabPane tab="Upload Item" key="3">
             <UploadItems />
