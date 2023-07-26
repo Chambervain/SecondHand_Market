@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Button, Input, message } from "antd";
+import { Form, Button, Input, message, Space } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { login } from "../utils";
 import { Link } from "react-router-dom";
@@ -69,15 +69,17 @@ class LoginPage extends React.Component {
             />
           </Form.Item>
           <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              className="login-form-button"
-              loading={this.state.loading}
-            >
-              Log in
-            </Button>
-            Or <Link to={`/register`}>register now!</Link>
+            <Space>
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="login-form-button"
+                loading={this.state.loading}
+              >
+                Log in
+              </Button>
+              Or <Link to={`/register`}>Register now !</Link>
+            </Space>
           </Form.Item>
         </Form>
       </div>
