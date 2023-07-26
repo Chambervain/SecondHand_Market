@@ -3,6 +3,7 @@ import "./App.css";
 import { Button, Dropdown, Layout, Space } from "antd";
 import { Tabs } from "antd";
 import { UserOutlined } from "@ant-design/icons";
+import Home from "./components/Home";
 
 const { Header, Content } = Layout;
 
@@ -15,7 +16,7 @@ function App() {
       return (
         <Tabs defaultActiveKey="1" centered>
           <Tabs.TabPane tab="Home Page" key="1">
-            Content of Tab Pane 1
+            <Home />
           </Tabs.TabPane>
           <Tabs.TabPane tab="My Items" key="2">
             Content of Tab Pane 2
