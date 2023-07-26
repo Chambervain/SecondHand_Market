@@ -100,7 +100,7 @@ class UploadItems extends React.Component {
         <Form.Item
           name="category"
           label="Category"
-          rules={[{ required: true, type: "number", min: 1 }]}
+          rules={[{ required: true }]}
         >
           <Select>
             <Select.Option value="Clothing">Clothing</Select.Option>

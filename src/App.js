@@ -1,15 +1,21 @@
 import { useState } from "react";
 import "./App.css";
-import { Button, Dropdown, Layout, Space, Upload } from "antd";
+import { Layout } from "antd";
 import { Tabs } from "antd";
-import { UserOutlined } from "@ant-design/icons";
 import UploadItems from "./components/UploadItems";
+import LoginPage from "./components/LoginPage";
+import HomeHeaderComponent from "./components/HeaderComponent";
 
-const { Header, Content } = Layout;
+const { Content } = Layout;
 
 function App() {
   // Here, Set authed state to be true in order to display Tab component, cuz there is no async function so far
-  const [authed, setAuthed] = useState(true);
+  const [authed, setAuthed] = useState(false);
+
+  const handleLoginSuccess = (token) => {
+    localStorage.setItem("authToken", token);
+    setAuthed(true);
+  };
 
   const renderContent = () => {
     if (authed) {
@@ -26,38 +32,18 @@ function App() {
           </Tabs.TabPane>
         </Tabs>
       );
+    } else {
+      return (
+        <div>
+          <LoginPage handleLoginSuccess={handleLoginSuccess} />
+        </div>
+      );
     }
-
-    return <div>This is Placeholder of homepage for the Letgo Market</div>;
   };
 
   return (
     <Layout style={{ height: "100vh" }}>
-      <Header
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          backgroundColor: "#FB8C00",
-        }}
-      >
-        <div style={{ fontSize: 16, fontWeight: 600, color: "white" }}>
-          Letgo: second-hand market
-        </div>
-
-        {authed && (
-          <div>
-            <Space>
-              <Button type="primary" shape="round">
-                Sign Up
-              </Button>
-
-              <Button type="primary" shape="round">
-                Sign In
-              </Button>
-            </Space>
-          </div>
-        )}
-      </Header>
+      <HomeHeaderComponent />
       <Content
         style={{
           height: "calc(100% - 64px)",
