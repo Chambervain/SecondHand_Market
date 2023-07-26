@@ -34,9 +34,7 @@ const ModificationForm = ({ itemId }) => {
     } catch (error) {
       message.error(error.message);
     } finally {
-      this.setState({
-        loading: false,
-      });
+      setLoading(false);
     }
   };
 

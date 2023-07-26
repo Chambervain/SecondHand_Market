@@ -1,0 +1,28 @@
+[
+  {
+    "id": 1,
+    "price": 30,
+    "description": "This is my item1.",
+    "condition": "Like new",
+    "category": "electonics",
+    "is_sold": false,
+    "images": [
+      {
+        "url": "https://images.pexels.com/photos/14528190/pexels-photo-14528190.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "price": 10,
+    "description": "This is my item2.",
+    "condition": "Like new",
+    "category": "clothes",
+    "is_sold": false,
+    "images": [
+      {
+        "url": "https://images.pexels.com/photos/14528190/pexels-photo-14528190.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+      }
+    ]
+  }
+]
