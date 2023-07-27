@@ -6,6 +6,8 @@ import UploadItems from "./components/UploadItems";
 import LoginPage from "./components/LoginPage";
 import HomeHeaderComponent from "./components/HeaderComponent";
 import MyOwnItems from "./components/MyOwnItem";
+import { UserOutlined } from "@ant-design/icons";
+import Home from "./components/Home";
 
 const { Content } = Layout;
 
@@ -23,7 +25,7 @@ function App() {
       return (
         <Tabs defaultActiveKey="1" centered>
           <Tabs.TabPane tab="Home Page" key="1">
-            Content of Tab Pane 1
+            <Home />
           </Tabs.TabPane>
           <Tabs.TabPane tab="My Items" key="2">
             <MyOwnItems />
