@@ -40,14 +40,9 @@ export const getAllItems = () => {
 };
 
 export const getItemById = (itemId) => {
-  const authToken = localStorage.getItem("authToken");
   const listItemUrl = `${domain}/item/${itemId}`;
 
-  return fetch(listItemUrl, {
-    headers: {
-      Authorization: `Bearer ${authToken}`,
-    },
-  }).then((response) => {
+  return fetch(listItemUrl).then((response) => {
     if (response.status !== 200) {
       throw Error("Fail to get item");
     }
@@ -103,5 +98,47 @@ export const uploadItem = (data) => {
     if (response.status !== 200) {
       throw Error("Fail to upload item");
     }
+  });
+};
+
+export const getMyItems = () => {
+  const authToken = localStorage.getItem("authToken");
+  const myItemsUrl = `${domain}/items/my`;
+
+  return fetch(myItemsUrl, {
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  }).then((response) => {
+    if (response.status !== 200) {
+      throw Error("Fail to get my items");
+    }
+
+    return response.json();
+  });
+};
+
+export const getItemsByCategory = (category) => {
+  const listItemsUrl = `${domain}/items/${category}`;
+
+  return fetch(listItemsUrl).then((response) => {
+    if (response.status !== 200) {
+      throw Error("Fail to get items by category");
+    }
+
+    return response.json();
+  });
+};
+
+export const searchItemsByKeyword = (keyword) => {
+  const searchItemsUrl = new URL(`${domain}/search/`);
+  searchItemsUrl.searchParams.append("keyword", keyword);
+
+  return fetch(searchItemsUrl).then((response) => {
+    if (response.status !== 200) {
+      throw Error("Fail to search items by keyword");
+    }
+
+    return response.json();
   });
 };
