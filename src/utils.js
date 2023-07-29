@@ -131,7 +131,7 @@ export const getItemsByCategory = (category) => {
 };
 
 export const searchItemsByKeyword = (keyword) => {
-  const searchItemsUrl = new URL(`${domain}/search/`);
+  const searchItemsUrl = new URL(`${domain}/search`);
   searchItemsUrl.searchParams.append("keyword", keyword);
 
   return fetch(searchItemsUrl).then((response) => {
