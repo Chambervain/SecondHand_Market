@@ -79,7 +79,7 @@ class UploadItems extends React.Component {
           label="Description"
           rules={[{ required: true }]}
         >
-          <Input.TextArea autoSize={{ minRows: 2, maxRows: 6 }} />
+          <Input.TextArea autoSize={{ minRows: 3, maxRows: 6 }} />
         </Form.Item>
         <Form.Item name="condition" label="Condition">
           <Select>
@@ -108,7 +108,7 @@ class UploadItems extends React.Component {
             <Select.Option value="Jewelry & Watches">
               Jewelry & Watches
             </Select.Option>
-            <Select.Option value="Home">Home</Select.Option>
+            <Select.Option value="Home">Household goods</Select.Option>
           </Select>
         </Form.Item>
         <Form.Item name="picture" label="Picture" rules={[{ required: true }]}>
@@ -122,7 +122,7 @@ class UploadItems extends React.Component {
             multiple={true}
           />
         </Form.Item>
-        <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 11 }}>
+        <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 12 }}>
           <Button type="primary" htmlType="submit" loading={this.state.loading}>
             Submit
           </Button>

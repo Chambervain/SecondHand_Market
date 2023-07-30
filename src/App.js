@@ -3,11 +3,12 @@ import "./App.css";
 import { Layout } from "antd";
 import { Tabs } from "antd";
 import UploadItems from "./components/UploadItems";
-import LoginPage from "./components/LoginPage";
-import HomeHeaderComponent from "./components/HeaderComponent";
-import MyOwnItems from "./components/MyOwnItem";
-import { UserOutlined } from "@ant-design/icons";
 import Home from "./components/Home";
+import Logout from "./components/Logout";
+import LoginPage from "./components/LoginPage";
+import { Space } from "antd";
+import { Header } from "antd/lib/layout/layout";
+import RegisterPage from "./components/RegisterPage";
 
 const { Content } = Layout;
 
@@ -18,6 +19,15 @@ function App() {
   const handleLoginSuccess = (token) => {
     localStorage.setItem("authToken", token);
     setAuthed(true);
+  };
+
+  const handleLogOut = () => {
+    localStorage.removeItem("authToken");
+    setAuthed(false);
+  };
+
+  const handleForgot = () => {
+    document.getElementsByTagName("button")[1].click();
   };
 
   const renderContent = () => {
@@ -37,16 +47,48 @@ function App() {
       );
     } else {
       return (
-        <div>
-          <LoginPage handleLoginSuccess={handleLoginSuccess} />
-        </div>
+        <Tabs defaultActiveKey="1" centered>
+          <Tabs.TabPane tab="Home Page" key="1">
+            <Home />
+          </Tabs.TabPane>
+        </Tabs>
       );
     }
   };
 
   return (
     <Layout style={{ height: "100vh" }}>
-      <HomeHeaderComponent />
+      <Header
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          backgroundColor: "#FB8C00",
+        }}
+      >
+        <div style={{ fontSize: 16, fontWeight: 600, color: "white" }}>
+          Letgo: second-hand market
+        </div>
+        {!authed && (
+          <div>
+            <Space>
+              <LoginPage
+                handleLoginSuccess={handleLoginSuccess}
+                handleForgot={handleForgot}
+              />
+
+              <RegisterPage />
+            </Space>
+          </div>
+        )}
+
+        {authed && (
+          <div>
+            <Space>
+              <Logout handleLogout={handleLogOut} />
+            </Space>
+          </div>
+        )}
+      </Header>
       <Content
         style={{
           height: "calc(100% - 64px)",

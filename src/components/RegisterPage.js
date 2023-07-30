@@ -1,8 +1,8 @@
 import { Button, Modal, Form, Input, message, Space } from "antd";
 import React from "react";
-import { login } from "../utils";
+import { register } from "../utils";
 
-class LoginPage extends React.Component {
+class RegisterPage extends React.Component {
   state = {
     modalOpen: false,
   };
@@ -19,28 +19,22 @@ class LoginPage extends React.Component {
     });
   };
 
-  handleForgot = () => {
-    this.handleCancel();
-    this.props.handleForgot();
-  };
-
   render() {
     const { modalOpen } = this.state;
     return (
       <>
         <Button onClick={this.openModal} type="primary" shape="round">
-          Login
+          Register
         </Button>
         <Modal
-          title="Letgo Login"
+          title="Letgo Register"
           open={modalOpen}
           onCancel={this.handleCancel}
           footer={null}
         >
-          <LoginForm
-            ref={(node) => (this.LoginForm = node)}
-            handleLoginSuccess={this.props.handleLoginSuccess}
-            handleForgot={this.handleForgot}
+          <RegisterForm
+            ref={(node) => (this.RegisterForm = node)}
+            handleCancel={this.handleCancel}
           />
         </Modal>
       </>
@@ -48,30 +42,39 @@ class LoginPage extends React.Component {
   }
 }
 
-export default LoginPage;
+export default RegisterPage;
 
-class LoginForm extends React.Component {
+class RegisterForm extends React.Component {
   layout = {
     labelCol: {
-      span: 5,
+      xs: {
+        span: 18,
+      },
+      sm: {
+        span: 8,
+      },
     },
     wrapperCol: {
-      span: 16,
+      xs: {
+        span: 24,
+      },
+      sm: {
+        span: 16,
+      },
     },
   };
 
   buttonLayout = {
     wrapperCol: {
       span: 32,
-      offset: 5,
+      offset: 9,
     },
   };
-
   state = {
     loading: false,
   };
 
-  handleLogin = async (values, handleLoginSuccess) => {
+  handleRegister = async (values) => {
     const formData = new FormData();
 
     formData.append("username", values.username);
@@ -84,11 +87,10 @@ class LoginForm extends React.Component {
     });
 
     try {
-      const resp = await login(formData);
-      this.props.handleLoginSuccess(resp.token);
-      message.success("Login Successfully");
+      await register(formData);
+      message.success("Register Successfully");
     } catch (error) {
-      message.error("Username or Password Incorrect");
+      message.error(error.message);
     } finally {
       this.setState({
         loading: false,
@@ -98,7 +100,7 @@ class LoginForm extends React.Component {
 
   render() {
     return (
-      <Form {...this.layout} ref={this.formData} onFinish={this.handleLogin}>
+      <Form {...this.layout} ref={this.formData} onFinish={this.handleRegister}>
         <Form.Item
           label="Username"
           name="username"
@@ -111,7 +113,6 @@ class LoginForm extends React.Component {
         >
           <Input disabled={this.state.loading} placeholder="Username" />
         </Form.Item>
-
         <Form.Item
           label="Password"
           name="password"
@@ -127,8 +128,46 @@ class LoginForm extends React.Component {
             placeholder="Password"
           />
         </Form.Item>
+
+        <Form.Item
+          name="confirm"
+          label="Confirm Password"
+          dependencies={["password"]}
+          hasFeedback
+          rules={[
+            {
+              required: true,
+              message: "Please confirm your password!",
+            },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue("password") === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(
+                  new Error("The two passwords that you entered do not match!")
+                );
+              },
+            }),
+          ]}
+        >
+          <Input.Password />
+        </Form.Item>
+
+        <Form.Item
+          label="Location"
+          name="location"
+          rules={[
+            {
+              required: true,
+              message: "Please input your Location",
+            },
+          ]}
+        >
+          <Input disabled={this.state.loading} placeholder="Location" />
+        </Form.Item>
         <Form.Item {...this.buttonLayout}>
-          <Space size={10}>
+          <Space size={20}>
             <Button
               type="primary"
               htmlType="submit"
@@ -145,9 +184,6 @@ class LoginForm extends React.Component {
             >
               Cancel
             </Button>
-            <a className="login-form-forgot" onClick={this.props.handleForgot}>
-              Forgot password
-            </a>
           </Space>
         </Form.Item>
       </Form>
