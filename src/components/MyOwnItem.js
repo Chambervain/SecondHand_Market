@@ -81,7 +81,7 @@ const MyOwnItems = () => {
                 </Text>
               </div>
             }
-            actions={[<ModifyButton itemId={item.id} />]}
+            actions={[<ModifyButton itemId={item.item_id} />]}
             extra={"$" + item.item_price}
           >
             <Carousel

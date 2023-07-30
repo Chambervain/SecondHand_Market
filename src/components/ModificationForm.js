@@ -58,11 +58,11 @@ const ModificationForm = ({ itemId }) => {
         <InputNumber addonAfter="$" />
       </Form.Item>
       <Form.Item
-        name="decription"
-        label="decription"
+        name="description"
+        label="description"
         rules={[{ required: true }]}
       >
-        <Input.TextArea name="decription" />
+        <Input.TextArea name="description" />
       </Form.Item>
       <Form.Item name="condition" label="condition">
         <Select>
