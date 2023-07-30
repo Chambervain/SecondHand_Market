@@ -3,6 +3,11 @@ import { Form, Button, Input, InputNumber, Select, message } from "antd";
 import { useState } from "react";
 import { modifyItem } from "../utils";
 
+const layout = {
+  labelCol: { span: 5 },
+  wrapperCol: { span: 16 },
+};
+
 const ModificationForm = ({ itemId }) => {
   const [loading, setLoading] = useState(false);
 
@@ -41,6 +46,7 @@ const ModificationForm = ({ itemId }) => {
 
   return (
     <Form
+      {...layout}
       name="nest-messages"
       onFinish={handleSubmit}
       style={{ maxWidth: 1000, margin: "auto" }}
@@ -51,7 +57,11 @@ const ModificationForm = ({ itemId }) => {
       <Form.Item name="price" label="price" rules={[{ required: true }]}>
         <InputNumber addonAfter="$" />
       </Form.Item>
-      <Form.Item name="decription" label="decription">
+      <Form.Item
+        name="decription"
+        label="decription"
+        rules={[{ required: true }]}
+      >
         <Input.TextArea name="decription" />
       </Form.Item>
       <Form.Item name="condition" label="condition">
@@ -70,7 +80,7 @@ const ModificationForm = ({ itemId }) => {
           </Select.Option>
         </Select>
       </Form.Item>
-      <Form.Item name="category" label="category">
+      <Form.Item name="category" label="category" rules={[{ required: true }]}>
         <Select>
           <Select.Option value="Clothing">Clothing</Select.Option>
           <Select.Option value="Electronics">Electronics</Select.Option>
@@ -80,7 +90,7 @@ const ModificationForm = ({ itemId }) => {
           <Select.Option value="Home">Home</Select.Option>
         </Select>
       </Form.Item>
-      <Form.Item name="image" label="image">
+      <Form.Item name="image" label="image" rules={[{ required: true }]}>
         <input
           type="file"
           accept="image/png, image/jpeg"

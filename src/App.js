@@ -9,6 +9,7 @@ import LoginPage from "./components/LoginPage";
 import { Space } from "antd";
 import { Header } from "antd/lib/layout/layout";
 import RegisterPage from "./components/RegisterPage";
+import MyOwnItems from "./components/MyOwnItem";
 
 const { Content } = Layout;
 
