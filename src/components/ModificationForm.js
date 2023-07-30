@@ -22,9 +22,10 @@ const ModificationForm = ({ itemId }) => {
     }
 
     formData.append("name", values.name);
-    formData.append("address", values.address);
+    formData.append("price", values.price);
     formData.append("description", values.description);
-    formData.append("guest_number", values.guest_number);
+    formData.append("condition", values.condition);
+    formData.append("category", values.category);
 
     setLoading(true);
 

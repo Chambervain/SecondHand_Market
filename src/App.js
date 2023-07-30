@@ -13,7 +13,7 @@ const { Content } = Layout;
 
 function App() {
   // Here, Set authed state to be true in order to display Tab component, cuz there is no async function so far
-  const [authed, setAuthed] = useState(true);
+  const [authed, setAuthed] = useState(false);
 
   const handleLoginSuccess = (token) => {
     localStorage.setItem("authToken", token);
