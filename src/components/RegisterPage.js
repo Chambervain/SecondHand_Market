@@ -23,7 +23,12 @@ class RegisterPage extends React.Component {
     const { modalOpen } = this.state;
     return (
       <>
-        <Button onClick={this.openModal} type="primary" shape="round">
+        <Button
+          onClick={this.openModal}
+          type="primary"
+          shape="round"
+          style={{ width: 88 }}
+        >
           Register
         </Button>
         <Modal
