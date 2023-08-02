@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import "./App.css";
-import { Button, Dropdown, Layout, Menu } from "antd";
+import { Button, Dropdown, Layout, Menu, message } from "antd";
 import React from "react";
 import {
   UserOutlined,
@@ -79,6 +79,10 @@ function App() {
 
   const changeContent = (value) => {
     console.log("set key: ", value);
+
+    if (!authed) {
+      message.warn("Please login before using");
+    }
     setKey(value);
   };
 
@@ -189,12 +193,9 @@ function App() {
       return <MyOwnItems />;
     } else if (authed && key == 3) {
       return <UploadItems />;
-    } else if (authed) {
-      return <div>User has authenticated</div>;
+    } else {
+      return <Home />;
     }
-    return <div>Visitor Place Holder</div>;
-
-    // return <Home />;
   };
 
   return (
