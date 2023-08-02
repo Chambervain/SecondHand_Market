@@ -25,6 +25,7 @@ import {
   SketchOutlined,
   HomeOutlined,
 } from "@ant-design/icons";
+import { Link } from "react-router-dom";
 
 const { Search } = Input;
 
@@ -155,46 +156,49 @@ const Home = () => {
         dataSource={data}
         renderItem={(item) => (
           <List.Item>
-            <Card
-              key={item.item_id}
-              title={
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Text ellipsis={true} style={{ maxWidth: 150 }}>
-                    {item.item_name}
-                  </Text>
-                  <Text ellipsis={true} style={{ maxWidth: 150 }}>
-                    ${item.item_price}
-                  </Text>
-                </div>
-              }
-            >
-              {
-                <Carousel
-                  autoplay
-                  dots={true}
-                  arrows={true}
-                  prevArrow={<LeftCircleOutlined />}
-                  nextArrow={<RightCircleOutlined />}
-                >
-                  {item.item_image_urls.map((url, index) => (
-                    <div key={index}>
-                      <Image
-                        src={url}
-                        width="100%"
-                        height="250px"
-                        style={{ objectFit: "cover" }}
-                      />
-                    </div>
-                  ))}
-                </Carousel>
-              }
-            </Card>
+            <Link to={`/items/${item.item_id}`}>
+              <Card
+                hoverable
+                key={item.item_id}
+                title={
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Text ellipsis={true} style={{ maxWidth: 150 }}>
+                      {item.item_name}
+                    </Text>
+                    <Text ellipsis={true} style={{ maxWidth: 150 }}>
+                      ${item.item_price}
+                    </Text>
+                  </div>
+                }
+              >
+                {
+                  <Carousel
+                    autoplay
+                    dots={true}
+                    arrows={true}
+                    prevArrow={<LeftCircleOutlined />}
+                    nextArrow={<RightCircleOutlined />}
+                  >
+                    {item.item_image_urls.map((url, index) => (
+                      <div key={index}>
+                        <Image
+                          src={url}
+                          width="100%"
+                          height="250px"
+                          style={{ objectFit: "cover" }}
+                        />
+                      </div>
+                    ))}
+                  </Carousel>
+                }
+              </Card>
+            </Link>
           </List.Item>
         )}
       />

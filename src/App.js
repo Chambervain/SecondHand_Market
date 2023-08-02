@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 import { Button, Dropdown, Layout, Space, Menu, Input } from "antd";
 import { Tabs } from "antd";
@@ -24,6 +24,11 @@ function App() {
   // Here, Set authed state to be true in order to display Tab component, cuz there is no async function so far
   const [authed, setAuthed] = useState(false);
   const [key, setKey] = useState(0);
+
+  useEffect(() => {
+    const authToken = localStorage.getItem("authToken");
+    setAuthed(authToken !== null);
+  }, []);
 
   const handleLoginSuccess = (token) => {
     localStorage.setItem("authToken", token);
