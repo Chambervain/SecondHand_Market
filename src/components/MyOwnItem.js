@@ -75,14 +75,22 @@ const MyOwnItems = () => {
           <Card
             key={item.item_id}
             title={
-              <div style={{ display: "flex", alignItems: "center" }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
                 <Text ellipsis={true} style={{ maxWidth: 150 }}>
                   {item.item_name}
+                </Text>
+                <Text ellipsis={true} style={{ maxWidth: 150 }}>
+                  ${item.item_price}
                 </Text>
               </div>
             }
             actions={[<ModifyButton itemId={item.item_id} />]}
-            extra={"$" + item.item_price}
           >
             <Carousel
               autoplay

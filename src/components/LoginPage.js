@@ -1,7 +1,6 @@
 import { Button, Modal, Form, Input, message, Space } from "antd";
 import React, { useState } from "react";
 import { login } from "../utils";
-import RegisterPage from "./RegisterPage";
 
 class LoginPage extends React.Component {
   state = {
@@ -33,7 +32,7 @@ class LoginPage extends React.Component {
           onClick={this.openModal}
           type="primary"
           shape="round"
-          style={{ width: 88 }}
+          style={{ width: 85 }}
         >
           Login
         </Button>

@@ -1,15 +1,12 @@
 import {
-  AppstoreOutlined,
   ContainerOutlined,
   DesktopOutlined,
-  MailOutlined,
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
   PieChartOutlined,
   EditFilled,
 } from "@ant-design/icons";
-import { Button, Menu, Layout, Space, Divider } from "antd";
+import { Menu, Layout } from "antd";
 import React, { useState } from "react";
+
 function getItem(label, key, icon, children, type) {
   return {
     key,
@@ -20,24 +17,20 @@ function getItem(label, key, icon, children, type) {
   };
 }
 const items = [
-  getItem("主页", "1", <PieChartOutlined />),
-  getItem("Buy", "2", <DesktopOutlined />),
-  getItem("Sell", "3", <ContainerOutlined />),
-  getItem("Categories", "sub1", <MailOutlined />, [
-    getItem("Option 1", "5"),
-    getItem("Option 2", "6"),
-    getItem("Option 3", "7"),
-    getItem("Option 4", "8"),
-  ]),
+  getItem("Home page", "1", <PieChartOutlined />),
+  getItem("My items", "2", <DesktopOutlined />),
+  getItem("Upload item", "3", <ContainerOutlined />),
 ];
 
 const { Sider } = Layout;
 
-const NavigationMenu = () => {
-  const [collapsed, setCollapsed] = useState(false);
-  const toggleCollapsed = () => {
-    setCollapsed(!collapsed);
+const NavigationMenu = ({ renderPage }) => {
+  const onClick = (e) => {
+    // console.log("Click", e);
+    console.log("MenuItem Key", e.key);
+    renderPage(e.key);
   };
+
   return (
     <Sider width={300} style={{ padding: 10, backgroundColor: "#112a45" }}>
       <div
@@ -67,6 +60,7 @@ const NavigationMenu = () => {
         </span>
       </div>
       <Menu
+        onClick={onClick}
         theme="dark"
         defaultSelectedKeys={["1"]}
         mode="inline"

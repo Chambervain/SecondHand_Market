@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import "./App.css";
-import { Button, Dropdown, Layout, Space, Menu, Input } from "antd";
-import { Tabs } from "antd";
+import { Button, Dropdown, Layout, Menu } from "antd";
 import React from "react";
 import {
   UserOutlined,
@@ -16,19 +15,22 @@ import NavigationMenu from "./components/NavigationMenu";
 import { HomeOutlined } from "@ant-design/icons";
 import MyOwnItems from "./components/MyOwnItem";
 import UploadItems from "./components/UploadItems";
-import DetailPage from "./components/DetailPage";
 
 const { Header, Content } = Layout;
 
 function App() {
-  // Here, Set authed state to be true in order to display Tab component, cuz there is no async function so far
   const [authed, setAuthed] = useState(false);
-  const [key, setKey] = useState(0);
+  const [key, setKey] = useState(1);
 
   useEffect(() => {
     const authToken = localStorage.getItem("authToken");
     setAuthed(authToken !== null);
   }, []);
+
+  // useEffect(() => {
+  //   const authToken = localStorage.getItem("authToken");
+  //   setAuthed(authToken !== null);
+  // }, [key]);
 
   const handleLoginSuccess = (token) => {
     localStorage.setItem("authToken", token);
@@ -40,6 +42,7 @@ function App() {
     setAuthed(false);
   };
 
+  // transfer to register from login page
   const handleForgot = () => {
     var obj = document.getElementsByClassName(
       "ant-dropdown ant-dropdown-placement-bottomRight "
@@ -75,6 +78,7 @@ function App() {
   };
 
   const changeContent = (value) => {
+    console.log("set key: ", value);
     setKey(value);
   };
 
@@ -87,14 +91,11 @@ function App() {
             justifyContent: "space-between",
             backgroundColor: "#096dd9",
             height: "8vh",
-            backgroundImage:
-              "url('https://www.freepik.com/free-vector/flat-design-geometric-real-estate-twitter-header_20814906.htm#query=website%20header&position=17&from_view=keyword&track=ais')",
           }}
         >
           <HomeOutlined
             style={{
               width: 3000,
-              fontSize: 16,
               fontWeight: 600,
               color: "white",
               fontSize: 25,
@@ -134,7 +135,7 @@ function App() {
                 color: "white",
               }}
               icon={<HomeOutlined style={{ fontSize: 25 }} />}
-              onClickCapture={() => changeContent(0)}
+              onClickCapture={() => changeContent(1)}
             />
           </div>
           <div
@@ -150,7 +151,7 @@ function App() {
                 color: "white",
               }}
               icon={<ShoppingCartOutlined style={{ fontSize: 23 }} />}
-              onClick={() => changeContent(1)}
+              onClick={() => changeContent(2)}
             />
           </div>
           <div
@@ -166,7 +167,7 @@ function App() {
                 color: "white",
               }}
               icon={<UploadOutlined style={{ fontSize: 23 }} />}
-              onClick={() => changeContent(2)}
+              onClick={() => changeContent(3)}
             />
           </div>
           <div>
@@ -180,19 +181,25 @@ function App() {
   };
 
   const renderContent = () => {
-    if (authed && key === 0) {
+    console.log("render content: ", key);
+
+    if (authed && key == 1) {
       return <Home />;
-    } else if (authed && key === 1) {
+    } else if (authed && key == 2) {
       return <MyOwnItems />;
-    } else if (authed && key === 2) {
+    } else if (authed && key == 3) {
       return <UploadItems />;
+    } else if (authed) {
+      return <div>User has authenticated</div>;
     }
-    return <Home />;
+    return <div>Visitor Place Holder</div>;
+
+    // return <Home />;
   };
 
   return (
     <Layout>
-      <NavigationMenu />
+      <NavigationMenu renderPage={changeContent} />
       <Layout className="site-layout" style={{ height: "100vh" }}>
         {renderHeaderContent()}
         <Content
