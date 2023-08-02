@@ -1,52 +1,48 @@
 import { ProCard } from "@ant-design/pro-components";
 import React from "react";
-import { Space } from "antd";
+import { Space, message } from "antd";
 import { Content } from "antd/lib/layout/layout";
 import { StarOutlined } from "@ant-design/icons";
 import AliceCarousel from "react-alice-carousel";
 import "react-alice-carousel/lib/alice-carousel.css";
 import GoogleApiWrapper from "./GoogleApiWrapper";
+import { getItemById } from "../utils";
 
-const handleDragStart = (e) => e.preventDefault();
-const items = [
-  <img
-    src="https://picsum.photos/id/1018/1000/600/"
-    onDragStart={handleDragStart}
-    role="presentation"
-  />,
-  <img
-    src="https://picsum.photos/id/1018/1000/600/"
-    onDragStart={handleDragStart}
-    role="presentation"
-  />,
-  <img
-    src="https://picsum.photos/id/1018/1000/600/"
-    onDragStart={handleDragStart}
-    role="presentation"
-  />,
-];
+const location = {
+  address: "1600 Amphitheatre Parkway, Mountain View, california.",
+  lat: 37.42216,
+  lng: -122.08427,
+};
 
 class DetailPage extends React.Component {
-  items = [
-    <img
-      src="https://picsum.photos/id/1018/1000/600/"
-      onDragStart={handleDragStart}
-      role="presentation"
-    />,
-    <img
-      src="https://picsum.photos/id/1018/1000/600/"
-      onDragStart={handleDragStart}
-      role="presentation"
-    />,
-    <img
-      src="https://picsum.photos/id/1018/1000/600/"
-      onDragStart={handleDragStart}
-      role="presentation"
-    />,
-  ];
-
   state = {
-    galleryItems: this.items.map((i) => <h2 key={i}>{i}</h2>),
+    loading: false,
+    data: [],
+  };
+
+  loadData = async () => {
+    this.setState({
+      loading: true,
+    });
+
+    try {
+      const currURL = window.location.href;
+      const id = currURL.split("/")[4];
+      const resp = await getItemById(id);
+      this.setState({
+        data: resp,
+      });
+    } catch (error) {
+      message.error(error.message);
+    } finally {
+      this.setState({
+        loading: false,
+      });
+    }
+  };
+
+  componentDidMount = () => {
+    this.loadData();
   };
 
   thumbItem = (item, i) => (
@@ -57,44 +53,91 @@ class DetailPage extends React.Component {
       ></img>
     </span>
   );
+
   render() {
+    const dataSour = { ...this.state.data };
+    console.log(this.state.data);
+    const {
+      item_name,
+      item_category,
+      item_condition,
+      item_description,
+      item_price,
+      item_is_sold,
+      item_image_urls,
+    } = dataSour;
+
+    let newArray = item_image_urls ? item_image_urls : [];
     return (
       <Content>
         <ProCard split="vertical">
-          <ProCard title="商品名称" headerBordered colSpan="70%">
+          <ProCard title={item_name} headerBordered colSpan="70%">
             <div>
               <AliceCarousel
                 dotsDisabled={true}
                 buttonsDisabled={true}
-                items={this.state.galleryItems}
+                items={newArray.map((url, index) => (
+                  <img
+                    style={{ width: 750 }}
+                    key={index}
+                    src={url}
+                    alt={`Image${index + 1}`}
+                  />
+                ))}
                 ref={(el) => (this.Carousel = el)}
               />
 
-              <nav>{this.items.map(this.thumbItem)}</nav>
+              <nav>
+                {newArray.map((url, index) => (
+                  <span
+                    key={index}
+                    onClick={() => this.Carousel.slideTo(index)}
+                  >
+                    <img
+                      style={{ width: 100, marginRight: "15px" }}
+                      src={url}
+                    ></img>
+                  </span>
+                ))}
+              </nav>
             </div>
           </ProCard>
-          <ProCard title="商品名称">
+          <ProCard title={item_name}>
             <Space direction="vertical">
-              <div style={{ height: 50 }}>类型:</div>
-              <div style={{ height: 50 }}>联系方式:</div>
-              <div style={{ height: 50 }}>地址:</div>
+              <div style={{ height: 40, fontSize: 20, fontWeight: 15 }}>
+                类型:{item_category}
+              </div>
+              <div style={{ height: 40, fontSize: 20, fontWeight: 15 }}>
+                价格:{item_price}
+              </div>
+              <div style={{ height: 40, fontSize: 20, fontWeight: 15 }}>
+                联系方式:{item_condition}
+              </div>
+              <div style={{ height: 40, fontSize: 20, fontWeight: 15 }}>
+                地址:{item_description}
+              </div>
               <div
                 style={{
-                  height: 200,
+                  height: 100,
                   display: "flex",
                   alignItems: "flex-end",
                   justifyItems: "flex-end",
                 }}
               >
-                <GoogleApiWrapper zoom={10} />
+                <GoogleApiWrapper centerLoc={location} />
                 <StarOutlined style={{ fontSize: 28, fontWeight: 600 }} />
               </div>
             </Space>
           </ProCard>
         </ProCard>
         <ProCard split="vertical">
-          <ProCard title="Description" headerBordered colSpan="70%">
-            <div style={{ height: 360 }}>右侧内容</div>
+          <ProCard
+            title="Description"
+            headerBordered
+            colSpan="70%"
+            size="large"
+          >
+            <div style={{ height: 360, fontSize: 30 }}>{item_description}</div>
           </ProCard>
           <ProCard title="Seller" headerBordered>
             <Space direction="vertical"></Space>
