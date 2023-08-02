@@ -17,25 +17,39 @@ import { HomeOutlined } from "@ant-design/icons";
 import MyOwnItems from "./components/MyOwnItem";
 import UploadItems from "./components/UploadItems";
 import DetailPage from "./components/DetailPage";
+import { GoogleApiWrapper } from "./components/GoogleApiWrapper";
 
 const { Header, Content } = Layout;
 
-function App() {
+class App extends React.Component {
   // Here, Set authed state to be true in order to display Tab component, cuz there is no async function so far
-  const [authed, setAuthed] = useState(false);
-  const [key, setKey] = useState(0);
+  state = {
+    authed: true,
+    key: 0,
+  };
 
-  const handleLoginSuccess = (token) => {
+  // componentDidMount = () => {
+  //   const authToken = localStorage.getItem("authToken");
+  //   this.setState({
+  //     authed: authToken !== null,
+  //   });
+  // };
+
+  handleLoginSuccess = (token) => {
     localStorage.setItem("authToken", token);
-    setAuthed(true);
+    this.setState({
+      authed: false,
+    });
   };
 
-  const handleLogOut = () => {
+  handleLogOut = () => {
     localStorage.removeItem("authToken");
-    setAuthed(false);
+    this.setState({
+      authed: true,
+    });
   };
 
-  const handleForgot = () => {
+  handleForgot = () => {
     var obj = document.getElementsByClassName(
       "ant-dropdown ant-dropdown-placement-bottomRight "
     );
@@ -43,38 +57,47 @@ function App() {
     arr[0].getElementsByTagName("button")[1].click();
   };
 
-  const userMenuLogin = () => {
-    return (
-      <Menu>
-        <Menu.Item>
-          <LoginPage
-            handleLoginSuccess={handleLoginSuccess}
-            handleForgot={handleForgot}
-          />
-        </Menu.Item>
-        <Menu.Item>
-          <RegisterPage />
-        </Menu.Item>
-      </Menu>
-    );
+  renderContent = () => {
+    if (!this.state.authed && this.state.key === 0) {
+      return <Home />;
+    } else if (!this.state.authed && this.state.key === 1) {
+      return <MyOwnItems />;
+    } else if (!this.state.authed && this.state.key === 2) {
+      return <UploadItems />;
+    }
+    return <DetailPage />;
   };
 
-  const userMenuLogout = () => {
-    return (
-      <Menu>
-        <Menu.Item>
-          <Logout handleLogout={handleLogOut} />
-        </Menu.Item>
-      </Menu>
-    );
+  userMenuLogin = (
+    <Menu>
+      <Menu.Item>
+        <LoginPage
+          handleLoginSuccess={this.handleLoginSuccess}
+          handleForgot={this.handleForgot}
+        />
+      </Menu.Item>
+      <Menu.Item>
+        <RegisterPage />
+      </Menu.Item>
+    </Menu>
+  );
+
+  userMenuLogout = (
+    <Menu>
+      <Menu.Item>
+        <Logout handleLogout={this.handleLogOut} />
+      </Menu.Item>
+    </Menu>
+  );
+
+  changeContent = (value) => {
+    this.setState({
+      key: value,
+    });
   };
 
-  const changeContent = (value) => {
-    setKey(value);
-  };
-
-  const renderHeaderContent = () => {
-    if (!authed) {
+  renderHeaderContent = () => {
+    if (this.state.authed) {
       return (
         <Header
           style={{
@@ -100,7 +123,7 @@ function App() {
           />
 
           <div>
-            <Dropdown trigger="click" overlay={userMenuLogin}>
+            <Dropdown trigger="click" overlay={this.userMenuLogin}>
               <Button icon={<UserOutlined />} shape="circle" />
             </Dropdown>
           </div>
@@ -129,7 +152,7 @@ function App() {
                 color: "white",
               }}
               icon={<HomeOutlined style={{ fontSize: 25 }} />}
-              onClickCapture={() => changeContent(0)}
+              onClickCapture={() => this.changeContent(0)}
             />
           </div>
           <div
@@ -145,7 +168,7 @@ function App() {
                 color: "white",
               }}
               icon={<ShoppingCartOutlined style={{ fontSize: 23 }} />}
-              onClick={() => changeContent(1)}
+              onClick={() => this.changeContent(1)}
             />
           </div>
           <div
@@ -161,11 +184,11 @@ function App() {
                 color: "white",
               }}
               icon={<UploadOutlined style={{ fontSize: 23 }} />}
-              onClick={() => changeContent(2)}
+              onClick={() => this.changeContent(2)}
             />
           </div>
           <div>
-            <Dropdown trigger="click" overlay={userMenuLogout}>
+            <Dropdown trigger="click" overlay={this.userMenuLogout}>
               <Button icon={<UserOutlined />} shape="circle" />
             </Dropdown>
           </div>
@@ -174,35 +197,26 @@ function App() {
     }
   };
 
-  const renderContent = () => {
-    if (authed && key === 0) {
-      return <Home />;
-    } else if (authed && key === 1) {
-      return <MyOwnItems />;
-    } else if (authed && key === 2) {
-      return <UploadItems />;
-    }
-    return <Home />;
-  };
-
-  return (
-    <Layout>
-      <NavigationMenu />
-      <Layout className="site-layout" style={{ height: "100vh" }}>
-        {renderHeaderContent()}
-        <Content
-          style={{
-            height: "calc(100% - 64px)",
-            padding: 20,
-            overflow: "auto",
-            backgroundColor: "#E3F2FD",
-          }}
-        >
-          {renderContent()}
-        </Content>
+  render() {
+    return (
+      <Layout>
+        <NavigationMenu />
+        <Layout className="site-layout" style={{ height: "100vh" }}>
+          {this.renderHeaderContent()}
+          <Content
+            style={{
+              height: "calc(100% - 64px)",
+              padding: 20,
+              overflow: "auto",
+              backgroundColor: "#E3F2FD",
+            }}
+          >
+            {this.renderContent()}
+          </Content>
+        </Layout>
       </Layout>
-    </Layout>
-  );
+    );
+  }
 }
 
 export default App;
