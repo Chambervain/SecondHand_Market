@@ -1,12 +1,13 @@
 import { ProCard } from "@ant-design/pro-components";
 import React from "react";
-import { Space, message } from "antd";
+import { Space, message, Button } from "antd";
 import { Content } from "antd/lib/layout/layout";
-import { StarOutlined } from "@ant-design/icons";
+import { HeartOutlined, HeartFilled } from "@ant-design/icons";
 import AliceCarousel from "react-alice-carousel";
 import "react-alice-carousel/lib/alice-carousel.css";
 import GoogleApiWrapper from "./GoogleApiWrapper";
 import { getItemById } from "../utils";
+import { addToFavorites, removeFromFavorites } from "../utils";
 
 const location = {
   address: "1600 Amphitheatre Parkway, Mountain View, california.",
@@ -18,6 +19,7 @@ class DetailPage extends React.Component {
   state = {
     loading: false,
     data: [],
+    favorite: false,
   };
 
   loadData = async () => {
@@ -43,6 +45,59 @@ class DetailPage extends React.Component {
 
   componentDidMount = () => {
     this.loadData();
+    const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    const item = { ...this.state.data };
+    const isFavorite = storedFavorites.some(
+      (favItem) => favItem.id === item.item_id
+    );
+    this.setState({ favorite: isFavorite });
+  };
+
+  addToFavorites = async () => {
+    // Add the item to favorites and update the state and local storage
+    const item = { ...this.state.data };
+    try {
+      // Call the backend API to add the item to favorites
+      await addToFavorites(item.item_id);
+      this.setState({ favorite: true });
+
+      // Update local storage
+      const storedFavorites =
+        JSON.parse(localStorage.getItem("favorites")) || [];
+      storedFavorites.push(item);
+      localStorage.setItem("favorites", JSON.stringify(storedFavorites));
+    } catch (error) {
+      console.error("Error adding to favorites:", error);
+    }
+  };
+
+  removeFromFavorites = async () => {
+    // Remove the item from favorites and update the state and local storage
+    const item = { ...this.state.data };
+    try {
+      // Call the backend API to remove the item from favorites
+      await removeFromFavorites(item.item_id);
+      this.setState({ favorite: false });
+
+      // Update local storage
+      const storedFavorites =
+        JSON.parse(localStorage.getItem("favorites")) || [];
+      const updatedFavorites = storedFavorites.filter(
+        (favItem) => favItem.id !== item.id
+      );
+      localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+    } catch (error) {
+      console.error("Error removing from favorites:", error);
+    }
+  };
+
+  toggleFavoriteStatus = () => {
+    // Toggle the favorite status of the item
+    if (this.state.favorite) {
+      this.removeFromFavorites();
+    } else {
+      this.addToFavorites();
+    }
   };
 
   thumbItem = (item, i) => (
@@ -56,8 +111,8 @@ class DetailPage extends React.Component {
 
   render() {
     const dataSour = { ...this.state.data };
-    console.log(this.state.data);
     const {
+      item_id,
       item_name,
       item_category,
       item_condition,
@@ -66,6 +121,8 @@ class DetailPage extends React.Component {
       item_is_sold,
       item_image_urls,
     } = dataSour;
+
+    const { favorite } = this.state;
 
     let newArray = item_image_urls ? item_image_urls : [];
     return (
@@ -102,6 +159,7 @@ class DetailPage extends React.Component {
               </nav>
             </div>
           </ProCard>
+
           <ProCard title={item_name}>
             <Space direction="vertical">
               <div style={{ height: 40, fontSize: 20, fontWeight: 15 }}>
@@ -116,6 +174,13 @@ class DetailPage extends React.Component {
               <div style={{ height: 40, fontSize: 20, fontWeight: 15 }}>
                 地址:{item_description}
               </div>
+              <span onClick={this.toggleFavoriteStatus}>
+                {favorite ? (
+                  <HeartFilled className="heart-icon" />
+                ) : (
+                  <HeartOutlined className="heart-icon" />
+                )}
+              </span>
               <div
                 style={{
                   height: 100,
@@ -125,7 +190,7 @@ class DetailPage extends React.Component {
                 }}
               >
                 <GoogleApiWrapper centerLoc={location} />
-                <StarOutlined style={{ fontSize: 28, fontWeight: 600 }} />
+                {/* <StarOutlined style={{ fontSize: 28, fontWeight: 600 }} /> */}
               </div>
             </Space>
           </ProCard>
