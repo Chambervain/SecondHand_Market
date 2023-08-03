@@ -17,6 +17,7 @@ import { HomeOutlined } from "@ant-design/icons";
 import MyOwnItems from "./components/MyOwnItem";
 import UploadItems from "./components/UploadItems";
 import DetailPage from "./components/DetailPage";
+import axios from "axios";
 
 const { Header, Content } = Layout;
 
@@ -24,8 +25,16 @@ function App() {
   // Here, Set authed state to be true in order to display Tab component, cuz there is no async function so far
   const [authed, setAuthed] = useState(false);
   const [key, setKey] = useState(0);
+  const [currLocation, setCurrLocation] = useState({});
 
   useEffect(() => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      console.log(position);
+      const { latitude, longitude } = position.coords;
+      console.log(latitude);
+      console.log(longitude);
+      setCurrLocation({ latitude, longitude });
+    });
     const authToken = localStorage.getItem("authToken");
     setAuthed(authToken !== null);
   }, []);
@@ -181,11 +190,13 @@ function App() {
 
   const renderContent = () => {
     if (authed && key === 0) {
-      return <Home />;
+      return <Home lat={currLocation.latitude} lon={currLocation.longitude} />;
     } else if (authed && key === 1) {
       return <MyOwnItems />;
     } else if (authed && key === 2) {
-      return <UploadItems />;
+      return (
+        <UploadItems lat={currLocation.latitude} lon={currLocation.longitude} />
+      );
     }
     return <Home />;
   };
