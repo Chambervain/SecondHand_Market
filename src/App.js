@@ -2,11 +2,7 @@ import { useState, useEffect } from "react";
 import "./App.css";
 import { Button, Dropdown, Layout, Menu, message } from "antd";
 import React from "react";
-import {
-  UserOutlined,
-  ShoppingCartOutlined,
-  UploadOutlined,
-} from "@ant-design/icons";
+import { UserOutlined, UploadOutlined } from "@ant-design/icons";
 import LoginPage from "./components/LoginPage";
 import RegisterPage from "./components/RegisterPage";
 import Logout from "./components/Logout";
@@ -15,6 +11,7 @@ import NavigationMenu from "./components/NavigationMenu";
 import { HomeOutlined } from "@ant-design/icons";
 import MyOwnItems from "./components/MyOwnItem";
 import UploadItems from "./components/UploadItems";
+import FavCart from "./components/FavCart";
 
 const { Header, Content } = Layout;
 
@@ -149,14 +146,7 @@ function App() {
               justifyContent: "center",
             }}
           >
-            <Button
-              type="text"
-              style={{
-                color: "white",
-              }}
-              icon={<ShoppingCartOutlined style={{ fontSize: 23 }} />}
-              onClick={() => changeContent(2)}
-            />
+            <FavCart />
           </div>
           <div
             style={{
