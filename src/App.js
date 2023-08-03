@@ -23,19 +23,26 @@ const { Header, Content } = Layout;
 function App() {
   const [authed, setAuthed] = useState(false);
   const [key, setKey] = useState(0);
-  const [currLocation, setCurrLocation] = useState({});
+  const [curLocation, setCurLocation] = useState({});
+  const [isLocationReady, setLocationReady] = useState(false);
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      console.log(position);
-      const { latitude, longitude } = position.coords;
-      console.log(latitude);
-      console.log(longitude);
-      setCurrLocation({ latitude, longitude });
-    });
+    // navigator.geolocation.getCurrentPosition((position) => {
+    //   const { latitude, longitude } = position.coords;
+    //   setCurrLocation({ latitude, longitude });
+    //   setLocationReady(true);
+    // });
+    getLocation();
     const authToken = localStorage.getItem("authToken");
     setAuthed(authToken !== null);
   }, []);
+
+  const getLocation = async () => {
+    const location = await axios.get("https://ipapi.co/json");
+    setCurLocation(location.data);
+    console.log(location.data);
+    setLocationReady(true);
+  };
 
   // useEffect(() => {
   //   const authToken = localStorage.getItem("authToken");
@@ -196,12 +203,25 @@ function App() {
 
   const renderContent = () => {
     if (authed && key === 0) {
-      return <Home lat={currLocation.latitude} lon={currLocation.longitude} />;
+      return (
+        <div>
+          {isLocationReady && (
+            <Home lat={curLocation.latitude} lon={curLocation.longitude} />
+          )}
+        </div>
+      );
     } else if (authed && key === 1) {
       return <MyOwnItems />;
     } else if (authed && key === 2) {
       return (
-        <UploadItems lat={currLocation.latitude} lon={currLocation.longitude} />
+        <div>
+          {isLocationReady && (
+            <UploadItems
+              lat={curLocation.latitude}
+              lon={curLocation.longitude}
+            />
+          )}
+        </div>
       );
     }
   };
