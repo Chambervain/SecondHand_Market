@@ -134,7 +134,7 @@ function App() {
                 color: "white",
               }}
               icon={<HomeOutlined style={{ fontSize: 25 }} />}
-              onClickCapture={() => changeContent(0)}
+              onClick={() => changeContent(0)}
             />
           </div>
           <div
