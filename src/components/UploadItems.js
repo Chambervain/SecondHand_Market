@@ -110,7 +110,9 @@ class UploadItems extends React.Component {
             <Select.Option value="Jewelry & Watches">
               Jewelry & Watches
             </Select.Option>
-            <Select.Option value="Home">Household goods</Select.Option>
+            <Select.Option value="Household goods">
+              Household goods
+            </Select.Option>
           </Select>
         </Form.Item>
         <Form.Item name="picture" label="Picture" rules={[{ required: true }]}>
