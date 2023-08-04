@@ -12,17 +12,34 @@ import { HomeOutlined } from "@ant-design/icons";
 import MyOwnItems from "./components/MyOwnItem";
 import UploadItems from "./components/UploadItems";
 import FavCart from "./components/FavCart";
+import DetailPage from "./components/DetailPage";
+import axios from "axios";
 
 const { Header, Content } = Layout;
 
 function App() {
   const [authed, setAuthed] = useState(false);
-  const [key, setKey] = useState(1);
+  const [key, setKey] = useState(0);
+  const [curLocation, setCurLocation] = useState({});
+  const [isLocationReady, setLocationReady] = useState(false);
 
   useEffect(() => {
+    // navigator.geolocation.getCurrentPosition((position) => {
+    //   const { latitude, longitude } = position.coords;
+    //   setCurrLocation({ latitude, longitude });
+    //   setLocationReady(true);
+    // });
+    getLocation();
     const authToken = localStorage.getItem("authToken");
     setAuthed(authToken !== null);
   }, []);
+
+  const getLocation = async () => {
+    const location = await axios.get("https://ipapi.co/json");
+    setCurLocation(location.data);
+    console.log(location.data);
+    setLocationReady(true);
+  };
 
   // useEffect(() => {
   //   const authToken = localStorage.getItem("authToken");
@@ -175,16 +192,27 @@ function App() {
   };
 
   const renderContent = () => {
-    console.log("render content: ", key);
-
-    if (authed && key == 1) {
-      return <Home />;
-    } else if (authed && key == 2) {
+    if (authed && key === 0) {
+      return (
+        <div>
+          {isLocationReady && (
+            <Home lat={curLocation.latitude} lon={curLocation.longitude} />
+          )}
+        </div>
+      );
+    } else if (authed && key === 1) {
       return <MyOwnItems />;
-    } else if (authed && key == 3) {
-      return <UploadItems />;
-    } else {
-      return <Home />;
+    } else if (authed && key === 2) {
+      return (
+        <div>
+          {isLocationReady && (
+            <UploadItems
+              lat={curLocation.latitude}
+              lon={curLocation.longitude}
+            />
+          )}
+        </div>
+      );
     }
   };
 
