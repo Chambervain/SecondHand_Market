@@ -14,23 +14,19 @@ import {
 } from "antd";
 import { Content } from "antd/lib/layout/layout";
 import {
-  AmazonCircleFilled,
-  StarOutlined,
   TaobaoCircleFilled,
   UserOutlined,
   HomeOutlined,
   CommentOutlined,
   HeartOutlined,
 } from "@ant-design/icons";
-import { Space, message, Button } from "antd";
-import { Content } from "antd/lib/layout/layout";
-import { HeartOutlined, HeartFilled } from "@ant-design/icons";
+
+import { HeartFilled } from "@ant-design/icons";
 import AliceCarousel from "react-alice-carousel";
 import "react-alice-carousel/lib/alice-carousel.css";
 import GoogleApiWrapper from "./GoogleApiWrapper";
 import { getItemById } from "../utils";
 import { TagOutlined } from "@ant-design/icons";
-import DescriptionsItem from "antd/lib/descriptions/Item";
 import { Link } from "react-router-dom";
 import { addToFavorites, removeFromFavorites } from "../utils";
 
@@ -233,13 +229,11 @@ class DetailPage extends React.Component {
   render() {
     const dataSour = { ...this.state.data };
     const {
-      item_id,
       item_name,
       item_category,
       item_condition,
       item_description,
       item_price,
-      item_is_sold,
       item_image_urls,
       user_name,
       item_posted_day,
