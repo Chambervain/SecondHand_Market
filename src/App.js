@@ -20,7 +20,7 @@ function App() {
   const [authed, setAuthed] = useState(false);
   const [key, setKey] = useState(1);
   const [curLocation, setCurLocation] = useState({});
-  const [isLocationReady, setLocationReady] = useState(false);
+  const [isLocationReady, setIsLocationReady] = useState(false);
 
   useEffect(() => {
     getLocation();
@@ -32,7 +32,7 @@ function App() {
     const location = await axios.get("https://ipapi.co/json");
     setCurLocation(location.data);
     console.log(location.data);
-    setLocationReady(true);
+    setIsLocationReady(true);
   };
 
   const handleLoginSuccess = (token) => {
@@ -83,7 +83,7 @@ function App() {
   const changeContent = (value) => {
     console.log("set key: ", value);
 
-    if (!authed) {
+    if ((!authed && value == 2) || (!authed && value == 3)) {
       message.warn("Please login before using");
     }
     setKey(value);
@@ -203,7 +203,7 @@ function App() {
         </div>
       );
     } else {
-      return <Home />;
+      return <Home lat={curLocation.latitude} lon={curLocation.longitude} />;
     }
   };
 

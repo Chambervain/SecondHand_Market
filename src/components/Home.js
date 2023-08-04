@@ -58,6 +58,7 @@ const Home = (props) => {
   const [keyword, setKeyword] = useState("");
   const { lat, lon } = props;
 
+  //The home component would render after gaining lat or lon
   useEffect(() => {
     setLoading(true);
     getAllItems(lat, lon)
@@ -65,12 +66,12 @@ const Home = (props) => {
         setData(data);
       })
       .catch((err) => {
-        // message.error(err.message);
+        message.error(err.message);
       })
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [lat, lon]);
 
   const onSearch = async (value) => {
     setKeyword(value);
