@@ -147,3 +147,52 @@ export const searchItemsByKeyword = (keyword, lat, lon) => {
     return response.json();
   });
 };
+
+export const getMyFavoriteItems = () => {
+  const authToken = localStorage.getItem("authToken");
+  const myFavoriteItemsUrl = `${domain}/my_favorites`;
+
+  return fetch(myFavoriteItemsUrl, {
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  }).then((response) => {
+    if (response.status !== 200) {
+      throw Error("Fail to get my favorite items");
+    }
+
+    return response.json();
+  });
+};
+
+export const addToFavorites = (itemId) => {
+  const authToken = localStorage.getItem("authToken");
+  const addFavoriteItemUrl = `${domain}/favorite/${itemId}`;
+
+  return fetch(addFavoriteItemUrl, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  }).then((response) => {
+    if (response.status !== 200) {
+      throw Error("Fail to add favorite item");
+    }
+  });
+};
+
+export const removeFromFavorites = (itemId) => {
+  const authToken = localStorage.getItem("authToken");
+  const deleteFavoriteItemUrl = `${domain}/favorite/${itemId}`;
+
+  return fetch(deleteFavoriteItemUrl, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  }).then((response) => {
+    if (response.status !== 200) {
+      throw Error("Fail to delete favorite item");
+    }
+  });
+};
