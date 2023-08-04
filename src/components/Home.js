@@ -65,7 +65,7 @@ const Home = (props) => {
         setData(data);
       })
       .catch((err) => {
-        message.error(err.message);
+        // message.error(err.message);
       })
       .finally(() => {
         setLoading(false);

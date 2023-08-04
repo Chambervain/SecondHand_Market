@@ -12,7 +12,6 @@ import { HomeOutlined } from "@ant-design/icons";
 import MyOwnItems from "./components/MyOwnItem";
 import UploadItems from "./components/UploadItems";
 import FavCart from "./components/FavCart";
-import DetailPage from "./components/DetailPage";
 import axios from "axios";
 
 const { Header, Content } = Layout;
@@ -143,7 +142,7 @@ function App() {
                 color: "white",
               }}
               icon={<HomeOutlined style={{ fontSize: 25 }} />}
-              onClick={() => changeContent(0)}
+              onClick={() => changeContent(1)}
             />
           </div>
           <div
