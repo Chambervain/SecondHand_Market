@@ -12,22 +12,28 @@ import { HomeOutlined } from "@ant-design/icons";
 import MyOwnItems from "./components/MyOwnItem";
 import UploadItems from "./components/UploadItems";
 import FavCart from "./components/FavCart";
+import axios from "axios";
 
 const { Header, Content } = Layout;
 
 function App() {
   const [authed, setAuthed] = useState(false);
   const [key, setKey] = useState(1);
+  const [curLocation, setCurLocation] = useState({});
+  const [isLocationReady, setLocationReady] = useState(false);
 
   useEffect(() => {
+    getLocation();
     const authToken = localStorage.getItem("authToken");
     setAuthed(authToken !== null);
   }, []);
 
-  // useEffect(() => {
-  //   const authToken = localStorage.getItem("authToken");
-  //   setAuthed(authToken !== null);
-  // }, [key]);
+  const getLocation = async () => {
+    const location = await axios.get("https://ipapi.co/json");
+    setCurLocation(location.data);
+    console.log(location.data);
+    setLocationReady(true);
+  };
 
   const handleLoginSuccess = (token) => {
     localStorage.setItem("authToken", token);
@@ -136,7 +142,7 @@ function App() {
                 color: "white",
               }}
               icon={<HomeOutlined style={{ fontSize: 25 }} />}
-              onClickCapture={() => changeContent(1)}
+              onClick={() => changeContent(1)}
             />
           </div>
           <div
@@ -175,14 +181,27 @@ function App() {
   };
 
   const renderContent = () => {
-    console.log("render content: ", key);
-
     if (authed && key == 1) {
-      return <Home />;
+      return (
+        <div>
+          {isLocationReady && (
+            <Home lat={curLocation.latitude} lon={curLocation.longitude} />
+          )}
+        </div>
+      );
     } else if (authed && key == 2) {
       return <MyOwnItems />;
     } else if (authed && key == 3) {
-      return <UploadItems />;
+      return (
+        <div>
+          {isLocationReady && (
+            <UploadItems
+              lat={curLocation.latitude}
+              lon={curLocation.longitude}
+            />
+          )}
+        </div>
+      );
     } else {
       return <Home />;
     }
