@@ -12,9 +12,7 @@ const ModifyButton = ({ itemId }) => {
   return (
     <>
       <Tooltip title="Modity item">
-        <EditOutlined onClick={openModal} shape="round">
-          Modify
-        </EditOutlined>
+        <EditOutlined onClick={openModal}>Modify</EditOutlined>
         {modalVisible && (
           <Modal
             title="Modify"

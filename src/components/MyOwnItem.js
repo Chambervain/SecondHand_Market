@@ -99,7 +99,6 @@ const MyOwnItems = () => {
                 handleMarkAsSold={() => {
                   handleMarkAsSold(item);
                 }}
-                key="setting"
               />,
               <ModifyButton itemId={item.item_id} />,
             ]}
