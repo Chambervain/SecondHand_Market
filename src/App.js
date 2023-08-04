@@ -19,16 +19,11 @@ const { Header, Content } = Layout;
 
 function App() {
   const [authed, setAuthed] = useState(false);
-  const [key, setKey] = useState(0);
+  const [key, setKey] = useState(1);
   const [curLocation, setCurLocation] = useState({});
   const [isLocationReady, setLocationReady] = useState(false);
 
   useEffect(() => {
-    // navigator.geolocation.getCurrentPosition((position) => {
-    //   const { latitude, longitude } = position.coords;
-    //   setCurrLocation({ latitude, longitude });
-    //   setLocationReady(true);
-    // });
     getLocation();
     const authToken = localStorage.getItem("authToken");
     setAuthed(authToken !== null);
@@ -40,11 +35,6 @@ function App() {
     console.log(location.data);
     setLocationReady(true);
   };
-
-  // useEffect(() => {
-  //   const authToken = localStorage.getItem("authToken");
-  //   setAuthed(authToken !== null);
-  // }, [key]);
 
   const handleLoginSuccess = (token) => {
     localStorage.setItem("authToken", token);
@@ -192,7 +182,7 @@ function App() {
   };
 
   const renderContent = () => {
-    if (authed && key === 0) {
+    if (authed && key == 1) {
       return (
         <div>
           {isLocationReady && (
@@ -200,9 +190,9 @@ function App() {
           )}
         </div>
       );
-    } else if (authed && key === 1) {
+    } else if (authed && key == 2) {
       return <MyOwnItems />;
-    } else if (authed && key === 2) {
+    } else if (authed && key == 3) {
       return (
         <div>
           {isLocationReady && (
@@ -213,6 +203,8 @@ function App() {
           )}
         </div>
       );
+    } else {
+      return <Home />;
     }
   };
 

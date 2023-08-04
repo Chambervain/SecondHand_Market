@@ -26,7 +26,6 @@ const { Sider } = Layout;
 
 const NavigationMenu = ({ renderPage }) => {
   const onClick = (e) => {
-    // console.log("Click", e);
     console.log("MenuItem Key", e.key);
     renderPage(e.key);
   };
