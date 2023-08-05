@@ -66,7 +66,6 @@ const Home = (props) => {
         setData(data);
       })
       .catch((err) => {
-        // Comment out in order to enhance user experience
         // message.error(err.message);
       })
       .finally(() => {
