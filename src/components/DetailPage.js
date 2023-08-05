@@ -143,7 +143,7 @@ class DetailPage extends React.Component {
 
       // Update local storage
       const storedAsked = JSON.parse(localStorage.getItem("asked")) || [];
-      storedAsked.push(item);
+      storedAsked.push({ ...item, ask_user_name: this.state.currentUserName });
       localStorage.setItem("asked", JSON.stringify(storedAsked));
 
       message.success("Message sent successfully");
@@ -240,18 +240,22 @@ class DetailPage extends React.Component {
     // call backend api to get current user name
     const currURL = window.location.href;
     const currentUserName = currURL.split("/")[5];
+    const currentItemID = currURL.split("/")[4];
+
     const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
     const storedAsked = JSON.parse(localStorage.getItem("asked")) || [];
-    const item = { ...this.state.data };
-    console.log("before change isFavorite current user name", currentUserName);
+
     const isFavorite = storedFavorites.some(
       (favItem) =>
-        favItem.id === item.item_id && favItem.fav_user_name === currentUserName
+        favItem.item_id == currentItemID &&
+        favItem.fav_user_name === currentUserName
     );
     const isAsked = storedAsked.some(
       (askedItem) =>
-        askedItem.id === item.id && askedItem.ask_user_name === currentUserName
+        askedItem.item_id == currentItemID &&
+        askedItem.ask_user_name === currentUserName
     );
+
     this.setState({ favorite: isFavorite });
     this.setState({ isAsked: isAsked });
     this.setState({ currentUserName: currentUserName });
