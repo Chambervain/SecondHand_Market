@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { List, Card, Carousel, Image, message } from "antd";
+import { List, Card, Carousel, Image, message, message } from "antd";
 import Text from "antd/lib/typography/Text";
 import {
   LeftCircleOutlined,
@@ -11,6 +11,8 @@ import ModifyButton from "./ModifyButton";
 import { getMyItems, modifyItem } from "../utils";
 import MarkAsSoldButton from "./MarkAsSoldButton";
 import CardTitle from "./CardTitle";
+import { getMyItems } from "../utils";
+import RemoveButton from "./RemoveButton";
 
 let mockData = [
   {
@@ -69,6 +71,22 @@ const MyOwnItems = () => {
       setLoading(false);
     }
   };
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
+    setLoading(true);
+
+    try {
+      const resp = await getMyItems();
+      setData(resp);
+    } catch (error) {
+      message.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <List
@@ -101,6 +119,11 @@ const MyOwnItems = () => {
                 }}
               />,
               <ModifyButton itemId={item.item_id} />,
+              <ModifyButton itemId={item.item_id} />,
+              <RemoveButton
+                itemId={item.item_id}
+                handleRemoveSuccess={loadData}
+              />,
             ]}
           >
             <Carousel

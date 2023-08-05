@@ -37,6 +37,8 @@ class UploadItems extends React.Component {
     formData.append("description", values.description);
     formData.append("condition", values.condition);
     formData.append("category", values.category);
+    formData.append("lat", this.props.lat);
+    formData.append("lon", this.props.lon);
 
     this.setState({
       loading: true,

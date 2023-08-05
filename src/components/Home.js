@@ -52,24 +52,26 @@ const items = [
   },
 ];
 
-const Home = () => {
+const Home = (props) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [keyword, setKeyword] = useState("");
+  const { lat, lon } = props;
 
+  //The home component would render after gaining lat or lon
   useEffect(() => {
     setLoading(true);
-    getAllItems()
+    getAllItems(lat, lon)
       .then((data) => {
         setData(data);
       })
       .catch((err) => {
-        message.error(err.message);
+        // message.error(err.message);
       })
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [lat, lon]);
 
   const onSearch = async (value) => {
     setKeyword(value);
@@ -81,7 +83,7 @@ const Home = () => {
     setLoading(true);
 
     try {
-      const data = await searchItemsByKeyword(keyword);
+      const data = await searchItemsByKeyword(keyword, lat, lon);
       setData(data);
     } catch (error) {
       message.error(error.message);
@@ -95,9 +97,10 @@ const Home = () => {
     // console.log("parameter", e.key);
 
     setLoading(true);
+    console.log(e.key);
 
     try {
-      const data = await getItemsByCategory(e.key);
+      const data = await getItemsByCategory(e.key, lat, lon);
       setData(data);
     } catch (error) {
       message.error(error.message);

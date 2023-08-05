@@ -87,7 +87,7 @@ const ModificationForm = ({ itemId }) => {
           <Select.Option value="Jewelry & Watches">
             Jewelry & Watches
           </Select.Option>
-          <Select.Option value="Home">Home</Select.Option>
+          <Select.Option value="Household goods">Household goods</Select.Option>
         </Select>
       </Form.Item>
       <Form.Item name="image" label="image" rules={[{ required: true }]}>

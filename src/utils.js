@@ -27,9 +27,10 @@ export const register = (credential) => {
   });
 };
 
-export const getAllItems = () => {
-  const listItemsUrl = `${domain}/items`;
-
+export const getAllItems = (lat, lon) => {
+  const listItemsUrl = new URL(`${domain}/items`);
+  listItemsUrl.searchParams.append("lat", lat);
+  listItemsUrl.searchParams.append("lon", lon);
   return fetch(listItemsUrl).then((response) => {
     if (response.status !== 200) {
       throw Error("Fail to get all items");
@@ -118,8 +119,10 @@ export const getMyItems = () => {
   });
 };
 
-export const getItemsByCategory = (category) => {
-  const listItemsUrl = `${domain}/items/${category}`;
+export const getItemsByCategory = (category, lat, lon) => {
+  const listItemsUrl = new URL(`${domain}/items/${category}`);
+  listItemsUrl.searchParams.append("lat", lat);
+  listItemsUrl.searchParams.append("lon", lon);
 
   return fetch(listItemsUrl).then((response) => {
     if (response.status !== 200) {
@@ -130,9 +133,11 @@ export const getItemsByCategory = (category) => {
   });
 };
 
-export const searchItemsByKeyword = (keyword) => {
+export const searchItemsByKeyword = (keyword, lat, lon) => {
   const searchItemsUrl = new URL(`${domain}/search`);
   searchItemsUrl.searchParams.append("keyword", keyword);
+  searchItemsUrl.searchParams.append("lat", lat);
+  searchItemsUrl.searchParams.append("lon", lon);
 
   return fetch(searchItemsUrl).then((response) => {
     if (response.status !== 200) {
@@ -140,5 +145,71 @@ export const searchItemsByKeyword = (keyword) => {
     }
 
     return response.json();
+  });
+};
+
+export const getMyFavoriteItems = () => {
+  const authToken = localStorage.getItem("authToken");
+  const myFavoriteItemsUrl = `${domain}/my_favorites`;
+
+  return fetch(myFavoriteItemsUrl, {
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  }).then((response) => {
+    if (response.status !== 200) {
+      throw Error("Fail to get my favorite items");
+    }
+
+    return response.json();
+  });
+};
+
+export const addToFavorites = (itemId) => {
+  const authToken = localStorage.getItem("authToken");
+  const addFavoriteItemUrl = `${domain}/favorite/${itemId}`;
+
+  return fetch(addFavoriteItemUrl, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  }).then((response) => {
+    if (response.status !== 200) {
+      throw Error("Fail to add favorite item");
+    }
+  });
+};
+
+export const removeFromFavorites = (itemId) => {
+  const authToken = localStorage.getItem("authToken");
+  const deleteFavoriteItemUrl = `${domain}/favorite/${itemId}`;
+
+  return fetch(deleteFavoriteItemUrl, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  }).then((response) => {
+    if (response.status !== 200) {
+      throw Error("Fail to delete favorite item");
+    }
+  });
+};
+
+export const askForSeller = (data, item_id) => {
+  const authToken = localStorage.getItem("authToken");
+  const uploadItemUrl = `${domain}/ask/${item_id}`;
+
+  return fetch(uploadItemUrl, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+    body: data,
+  }).then((response) => {
+    if (response.status !== 200) {
+      throw Error("Fail to chat with seller");
+    }
   });
 };

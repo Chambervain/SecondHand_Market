@@ -2,11 +2,7 @@ import { useState, useEffect } from "react";
 import "./App.css";
 import { Button, Dropdown, Layout, Menu, message } from "antd";
 import React from "react";
-import {
-  UserOutlined,
-  ShoppingCartOutlined,
-  UploadOutlined,
-} from "@ant-design/icons";
+import { UserOutlined, UploadOutlined } from "@ant-design/icons";
 import LoginPage from "./components/LoginPage";
 import RegisterPage from "./components/RegisterPage";
 import Logout from "./components/Logout";
@@ -15,22 +11,29 @@ import NavigationMenu from "./components/NavigationMenu";
 import { HomeOutlined } from "@ant-design/icons";
 import MyOwnItems from "./components/MyOwnItem";
 import UploadItems from "./components/UploadItems";
+import FavCart from "./components/FavCart";
+import axios from "axios";
 
 const { Header, Content } = Layout;
 
 function App() {
   const [authed, setAuthed] = useState(false);
   const [key, setKey] = useState(1);
+  const [curLocation, setCurLocation] = useState({});
+  const [isLocationReady, setIsLocationReady] = useState(false);
 
   useEffect(() => {
+    getLocation();
     const authToken = localStorage.getItem("authToken");
     setAuthed(authToken !== null);
   }, []);
 
-  // useEffect(() => {
-  //   const authToken = localStorage.getItem("authToken");
-  //   setAuthed(authToken !== null);
-  // }, [key]);
+  const getLocation = async () => {
+    const location = await axios.get("https://ipapi.co/json");
+    setCurLocation(location.data);
+    console.log(location.data);
+    setIsLocationReady(true);
+  };
 
   const handleLoginSuccess = (token) => {
     localStorage.setItem("authToken", token);
@@ -80,7 +83,7 @@ function App() {
   const changeContent = (value) => {
     console.log("set key: ", value);
 
-    if (!authed) {
+    if ((!authed && value == 2) || (!authed && value == 3)) {
       message.warn("Please login before using");
     }
     setKey(value);
@@ -139,7 +142,7 @@ function App() {
                 color: "white",
               }}
               icon={<HomeOutlined style={{ fontSize: 25 }} />}
-              onClickCapture={() => changeContent(1)}
+              onClick={() => changeContent(1)}
             />
           </div>
           <div
@@ -149,14 +152,7 @@ function App() {
               justifyContent: "center",
             }}
           >
-            <Button
-              type="text"
-              style={{
-                color: "white",
-              }}
-              icon={<ShoppingCartOutlined style={{ fontSize: 23 }} />}
-              onClick={() => changeContent(2)}
-            />
+            <FavCart />
           </div>
           <div
             style={{
@@ -185,16 +181,29 @@ function App() {
   };
 
   const renderContent = () => {
-    console.log("render content: ", key);
-
     if (authed && key == 1) {
-      return <Home />;
+      return (
+        <div>
+          {isLocationReady && (
+            <Home lat={curLocation.latitude} lon={curLocation.longitude} />
+          )}
+        </div>
+      );
     } else if (authed && key == 2) {
       return <MyOwnItems />;
     } else if (authed && key == 3) {
-      return <UploadItems />;
+      return (
+        <div>
+          {isLocationReady && (
+            <UploadItems
+              lat={curLocation.latitude}
+              lon={curLocation.longitude}
+            />
+          )}
+        </div>
+      );
     } else {
-      return <Home />;
+      return <Home lat={curLocation.latitude} lon={curLocation.longitude} />;
     }
   };
 
