@@ -3,6 +3,7 @@ import {
   getAllItems,
   getItemsByCategory,
   searchItemsByKeyword,
+  getCurrentUserName,
 } from "../utils";
 import {
   Card,
@@ -52,26 +53,37 @@ const items = [
   },
 ];
 
-const Home = (props) => {
+const Home = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [keyword, setKeyword] = useState("");
-  const { lat, lon } = props;
+  const [username, setUsername] = useState("");
 
   //The home component would render after gaining lat or lon
   useEffect(() => {
     setLoading(true);
-    getAllItems(lat, lon)
+    getAllItems()
       .then((data) => {
         setData(data);
       })
       .catch((err) => {
-        // message.error(err.message);
+        message.error(err.message);
       })
       .finally(() => {
         setLoading(false);
       });
-  }, [lat, lon]);
+  }, []);
+
+  // get current username by calling backend api
+  useEffect(() => {
+    getCurrentUserName()
+      .then((data) => {
+        setUsername(data.username);
+      })
+      .catch((err) => {
+        // message.error(err.message);
+      });
+  }, []);
 
   const onSearch = async (value) => {
     setKeyword(value);
@@ -83,7 +95,7 @@ const Home = (props) => {
     setLoading(true);
 
     try {
-      const data = await searchItemsByKeyword(keyword, lat, lon);
+      const data = await searchItemsByKeyword(keyword);
       setData(data);
     } catch (error) {
       message.error(error.message);
@@ -100,7 +112,7 @@ const Home = (props) => {
     console.log(e.key);
 
     try {
-      const data = await getItemsByCategory(e.key, lat, lon);
+      const data = await getItemsByCategory(e.key);
       setData(data);
     } catch (error) {
       message.error(error.message);
@@ -159,7 +171,7 @@ const Home = (props) => {
         dataSource={data}
         renderItem={(item) => (
           <List.Item>
-            <Link to={`/items/${item.item_id}`}>
+            <Link to={`/items/${item.item_id}/${username}`}>
               <Card
                 hoverable
                 key={item.item_id}

@@ -27,10 +27,8 @@ export const register = (credential) => {
   });
 };
 
-export const getAllItems = (lat, lon) => {
+export const getAllItems = () => {
   const listItemsUrl = new URL(`${domain}/items`);
-  listItemsUrl.searchParams.append("lat", lat);
-  listItemsUrl.searchParams.append("lon", lon);
   return fetch(listItemsUrl).then((response) => {
     if (response.status !== 200) {
       throw Error("Fail to get all items");
@@ -119,10 +117,8 @@ export const getMyItems = () => {
   });
 };
 
-export const getItemsByCategory = (category, lat, lon) => {
+export const getItemsByCategory = (category) => {
   const listItemsUrl = new URL(`${domain}/items/${category}`);
-  listItemsUrl.searchParams.append("lat", lat);
-  listItemsUrl.searchParams.append("lon", lon);
 
   return fetch(listItemsUrl).then((response) => {
     if (response.status !== 200) {
@@ -133,11 +129,9 @@ export const getItemsByCategory = (category, lat, lon) => {
   });
 };
 
-export const searchItemsByKeyword = (keyword, lat, lon) => {
+export const searchItemsByKeyword = (keyword) => {
   const searchItemsUrl = new URL(`${domain}/search`);
   searchItemsUrl.searchParams.append("keyword", keyword);
-  searchItemsUrl.searchParams.append("lat", lat);
-  searchItemsUrl.searchParams.append("lon", lon);
 
   return fetch(searchItemsUrl).then((response) => {
     if (response.status !== 200) {
@@ -211,5 +205,22 @@ export const askForSeller = (data, item_id) => {
     if (response.status !== 200) {
       throw Error("Fail to chat with seller");
     }
+  });
+};
+
+export const getCurrentUserName = () => {
+  const authToken = localStorage.getItem("authToken");
+  const myFavoriteItemsUrl = `${domain}/username`;
+
+  return fetch(myFavoriteItemsUrl, {
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  }).then((response) => {
+    if (response.status !== 200) {
+      throw Error("Fail to get current user name");
+    }
+
+    return response.json();
   });
 };

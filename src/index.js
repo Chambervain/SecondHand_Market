@@ -14,7 +14,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: "items/:itemId",
+    path: "items/:itemId/:userName",
     element: <DetailPage />,
   },
 ]);

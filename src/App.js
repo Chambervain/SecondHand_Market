@@ -184,9 +184,7 @@ function App() {
     if (authed && key == 1) {
       return (
         <div>
-          {isLocationReady && (
-            <Home lat={curLocation.latitude} lon={curLocation.longitude} />
-          )}
+          <Home />
         </div>
       );
     } else if (authed && key == 2) {
@@ -194,16 +192,11 @@ function App() {
     } else if (authed && key == 3) {
       return (
         <div>
-          {isLocationReady && (
-            <UploadItems
-              lat={curLocation.latitude}
-              lon={curLocation.longitude}
-            />
-          )}
+          <UploadItems />
         </div>
       );
     } else {
-      return <Home lat={curLocation.latitude} lon={curLocation.longitude} />;
+      return <Home />;
     }
   };
 

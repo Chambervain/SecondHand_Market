@@ -29,7 +29,12 @@ import GoogleApiWrapper from "./GoogleApiWrapper";
 import { getItemById } from "../utils";
 import { TagOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import { addToFavorites, removeFromFavorites, askForSeller } from "../utils";
+import {
+  addToFavorites,
+  removeFromFavorites,
+  askForSeller,
+  getCurrentUserName,
+} from "../utils";
 import { Form, Input } from "antd";
 
 const location = {
@@ -95,6 +100,7 @@ class DetailPage extends React.Component {
     favorite: false,
     modalVisible: false,
     isAsked: false,
+    currentUserName: "",
   };
 
   handleCancel = () => {
@@ -116,7 +122,7 @@ class DetailPage extends React.Component {
 
       // Update local storage
       const storedAsked = JSON.parse(localStorage.getItem("asked")) || [];
-      storedAsked.push(item);
+      storedAsked.push({ ...item, ask_user_name: this.state.currentUserName });
       localStorage.setItem("asked", JSON.stringify(storedAsked));
 
       message.success("Message sent successfully");
@@ -231,15 +237,24 @@ class DetailPage extends React.Component {
 
   componentDidMount = () => {
     this.loadData();
+    // call backend api to get current user name
+    const currURL = window.location.href;
+    const currentUserName = currURL.split("/")[5];
     const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
     const storedAsked = JSON.parse(localStorage.getItem("asked")) || [];
     const item = { ...this.state.data };
+    console.log("before change isFavorite current user name", currentUserName);
     const isFavorite = storedFavorites.some(
-      (favItem) => favItem.id === item.item_id
+      (favItem) =>
+        favItem.id === item.item_id && favItem.fav_user_name === currentUserName
     );
-    const isAsked = storedAsked.some((askedItem) => askedItem.id === item.id);
+    const isAsked = storedAsked.some(
+      (askedItem) =>
+        askedItem.id === item.id && askedItem.ask_user_name === currentUserName
+    );
     this.setState({ favorite: isFavorite });
     this.setState({ isAsked: isAsked });
+    this.setState({ currentUserName: currentUserName });
   };
 
   addToFavorites = async () => {
@@ -253,7 +268,10 @@ class DetailPage extends React.Component {
       // Update local storage
       const storedFavorites =
         JSON.parse(localStorage.getItem("favorites")) || [];
-      storedFavorites.push(item);
+      storedFavorites.push({
+        ...item,
+        fav_user_name: this.state.currentUserName,
+      });
       localStorage.setItem("favorites", JSON.stringify(storedFavorites));
     } catch (error) {
       console.error("Error adding to favorites:", error);
@@ -272,7 +290,9 @@ class DetailPage extends React.Component {
       const storedFavorites =
         JSON.parse(localStorage.getItem("favorites")) || [];
       const updatedFavorites = storedFavorites.filter(
-        (favItem) => favItem.id !== item.id
+        (favItem) =>
+          favItem.id !== item.id ||
+          favItem.fav_user_name !== this.state.currentUserName
       );
       localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
     } catch (error) {
