@@ -4,24 +4,28 @@ import Text from "antd/lib/typography/Text";
 import { LeftCircleOutlined, RightCircleOutlined } from "@ant-design/icons";
 import ModifyButton from "./ModifyButton";
 import { getMyItems } from "../utils";
+import RemoveButton from "./RemoveButton";
 
 const MyOwnItems = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    setLoading(true);
-    getMyItems()
-      .then((resp) => {
-        setData(resp);
-      })
-      .catch((err) => {
-        message.error(err.message);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    loadData();
   }, []);
+
+  const loadData = async () => {
+    setLoading(true);
+
+    try {
+      const resp = await getMyItems();
+      setData(resp);
+    } catch (error) {
+      message.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <List
@@ -56,7 +60,13 @@ const MyOwnItems = () => {
                 </Text>
               </div>
             }
-            actions={[<ModifyButton itemId={item.item_id} />]}
+            actions={[
+              <ModifyButton itemId={item.item_id} />,
+              <RemoveButton
+                itemId={item.item_id}
+                handleRemoveSuccess={loadData}
+              />,
+            ]}
           >
             <Carousel
               autoplay
