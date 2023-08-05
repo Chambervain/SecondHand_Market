@@ -196,3 +196,20 @@ export const removeFromFavorites = (itemId) => {
     }
   });
 };
+
+export const askForSeller = (data, item_id) => {
+  const authToken = localStorage.getItem("authToken");
+  const uploadItemUrl = `${domain}/ask/${item_id}`;
+
+  return fetch(uploadItemUrl, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+    body: data,
+  }).then((response) => {
+    if (response.status !== 200) {
+      throw Error("Fail to chat with seller");
+    }
+  });
+};

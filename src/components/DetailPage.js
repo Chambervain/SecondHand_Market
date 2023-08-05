@@ -11,6 +11,7 @@ import {
   Layout,
   Dropdown,
   Breadcrumb,
+  Modal,
 } from "antd";
 import { Content } from "antd/lib/layout/layout";
 import {
@@ -28,12 +29,19 @@ import GoogleApiWrapper from "./GoogleApiWrapper";
 import { getItemById } from "../utils";
 import { TagOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import { addToFavorites, removeFromFavorites } from "../utils";
+import { addToFavorites, removeFromFavorites, askForSeller } from "../utils";
+import { Form, Input } from "antd";
 
 const location = {
   address: "1600 Amphitheatre Parkway, Mountain View, california.",
   lat: 37.42216,
   lng: -122.08427,
+};
+
+const layout = {
+  // 表单左边是label，右边是wrapper
+  labelCol: { span: 5 },
+  wrapperCol: { span: 16 },
 };
 
 function getRandomIndexesFromArray(arr, count) {
@@ -85,6 +93,58 @@ class DetailPage extends React.Component {
     loading: false,
     data: [],
     favorite: false,
+    modalVisible: false,
+    isAsked: false,
+  };
+
+  handleCancel = () => {
+    this.setState({ modalVisible: false });
+  };
+
+  handleAskForSeller = () => {
+    this.setState({ modalVisible: true });
+  };
+
+  handleButtonSendMessage = async (content) => {
+    const formData = new FormData();
+    formData.append("content", content);
+    const currURL = window.location.href;
+    const id = currURL.split("/")[4];
+    const item = { ...this.state.data };
+    try {
+      await askForSeller(formData, id);
+
+      // Update local storage
+      const storedAsked = JSON.parse(localStorage.getItem("asked")) || [];
+      storedAsked.push(item);
+      localStorage.setItem("asked", JSON.stringify(storedAsked));
+
+      message.success("Message sent successfully");
+      this.setState({ isAsked: true, modalVisible: false });
+    } catch (error) {
+      message.error(error.message);
+    }
+  };
+
+  handleSubmit = async (values) => {
+    const formData = new FormData();
+    formData.append("content", values.content);
+    const currURL = window.location.href;
+    const id = currURL.split("/")[4];
+    const item = { ...this.state.data };
+    try {
+      await askForSeller(formData, id);
+
+      // Update local storage
+      const storedAsked = JSON.parse(localStorage.getItem("asked")) || [];
+      storedAsked.push(item);
+      localStorage.setItem("asked", JSON.stringify(storedAsked));
+
+      message.success("Message sent successfully");
+      this.setState({ isAsked: true, modalVisible: false });
+    } catch (error) {
+      message.error(error.message);
+    }
   };
 
   linktoHome = () => {
@@ -172,11 +232,14 @@ class DetailPage extends React.Component {
   componentDidMount = () => {
     this.loadData();
     const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
+    const storedAsked = JSON.parse(localStorage.getItem("asked")) || [];
     const item = { ...this.state.data };
     const isFavorite = storedFavorites.some(
       (favItem) => favItem.id === item.item_id
     );
+    const isAsked = storedAsked.some((askedItem) => askedItem.id === item.id);
     this.setState({ favorite: isFavorite });
+    this.setState({ isAsked: isAsked });
   };
 
   addToFavorites = async () => {
@@ -240,7 +303,7 @@ class DetailPage extends React.Component {
     } = dataSour;
 
     const colorSelected = getRandomIndexesFromArray(items, 2);
-    const { favorite } = this.state;
+    const { favorite, isAsked } = this.state;
 
     let newArray = item_image_urls ? item_image_urls : [];
     return (
@@ -339,18 +402,99 @@ class DetailPage extends React.Component {
                       height: 60,
                     }}
                   >
-                    <Button
-                      type="primary"
-                      shape="round"
-                      block
-                      icon={<CommentOutlined />}
-                      style={{
-                        height: 40,
-                        fontSize: 20,
-                      }}
+                    {!isAsked ? (
+                      <Button
+                        type="primary"
+                        shape="round"
+                        block
+                        icon={<CommentOutlined />}
+                        style={{
+                          height: 40,
+                          fontSize: 20,
+                        }}
+                        onClick={this.handleAskForSeller}
+                      >
+                        Ask For Seller
+                      </Button>
+                    ) : (
+                      <Button
+                        type="primary"
+                        shape="round"
+                        block
+                        icon={<CommentOutlined />}
+                        style={{
+                          height: 40,
+                          fontSize: 20,
+                        }}
+                        disabled={true}
+                      >
+                        Asked
+                      </Button>
+                    )}
+                    <Modal
+                      destroyOnClose={true}
+                      title={"Send A Message"}
+                      visible={this.state.modalVisible}
+                      footer={null}
+                      onCancel={this.handleCancel}
                     >
-                      Ask
-                    </Button>
+                      Click the button to send a message or write your own
+                      message.
+                      <div>
+                        <Button
+                          shape="round"
+                          style={{
+                            display: "flex",
+                            padding: 0,
+                            height: 20,
+                            fontSize: 12,
+                          }}
+                          onClick={() =>
+                            this.handleButtonSendMessage(
+                              "Is this item still here?"
+                            )
+                          }
+                        >
+                          Is this item still here?
+                        </Button>
+                      </div>
+                      <Space />
+                      <div>
+                        <Button
+                          shape="round"
+                          style={{
+                            height: 20,
+                            fontSize: 12,
+                          }}
+                          onClick={() =>
+                            this.handleButtonSendMessage(
+                              "Can I get a discount for this item?"
+                            )
+                          }
+                        >
+                          Can I get a discount for this item?
+                        </Button>
+                      </div>
+                      <Form preserve={false} onFinish={this.handleSubmit}>
+                        <Form.Item name="content" label="Content">
+                          <Input.TextArea
+                            autoSize={{ minRows: 3, maxRows: 6 }}
+                          />
+                        </Form.Item>
+                        <Form.Item
+                          wrapperCol={{ ...layout.wrapperCol, offset: 12 }}
+                        >
+                          <Button
+                            type="primary"
+                            shape="round"
+                            htmlType="submit"
+                            loading={this.state.loading}
+                          >
+                            Send
+                          </Button>
+                        </Form.Item>
+                      </Form>
+                    </Modal>
                   </div>
                   <div
                     style={{
@@ -362,9 +506,10 @@ class DetailPage extends React.Component {
                       <Button
                         shape="round"
                         block
-                        icon={<HeartFilled />}
+                        icon={<HeartFilled style={{ color: "red" }} />}
                         style={{
                           height: 40,
+                          fontSize: 20,
                         }}
                         onClick={this.toggleFavoriteStatus}
                       >
@@ -377,6 +522,7 @@ class DetailPage extends React.Component {
                         icon={<HeartOutlined />}
                         style={{
                           height: 40,
+                          fontSize: 20,
                         }}
                         onClick={this.toggleFavoriteStatus}
                       >
