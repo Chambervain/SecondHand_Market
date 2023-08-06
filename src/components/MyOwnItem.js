@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { List, Card, Carousel, Image, message, message } from "antd";
+import { List, Card, Carousel, Image, message } from "antd";
 import Text from "antd/lib/typography/Text";
 import {
   LeftCircleOutlined,
@@ -11,7 +11,6 @@ import ModifyButton from "./ModifyButton";
 import { getMyItems, modifyItem } from "../utils";
 import MarkAsSoldButton from "./MarkAsSoldButton";
 import CardTitle from "./CardTitle";
-import { getMyItems } from "../utils";
 import RemoveButton from "./RemoveButton";
 
 let mockData = [
@@ -49,28 +48,6 @@ const MyOwnItems = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
 
-  // useEffect(() => {
-  //   setLoading(true);
-  //   getMyItems()
-  //     .then((resp) => {
-  //       setData(resp);
-  //     })
-  //     .finally(() => {
-  //       setLoading(false);
-  //     });
-  // }, []);
-
-  const handleMarkAsSold = (item) => {
-    setLoading(true);
-    item.item_is_sold = !item.item_is_sold;
-    try {
-      modifyItem(item, item.itemId);
-    } catch (error) {
-      message.error(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
   useEffect(() => {
     loadData();
   }, []);
@@ -100,7 +77,7 @@ const MyOwnItems = () => {
         xl: 4,
         xxl: 4,
       }}
-      dataSource={mockData}
+      dataSource={data}
       renderItem={(item) => (
         <List.Item>
           <Card
@@ -113,12 +90,7 @@ const MyOwnItems = () => {
               />
             }
             actions={[
-              <MarkAsSoldButton
-                handleMarkAsSold={() => {
-                  handleMarkAsSold(item);
-                }}
-              />,
-              <ModifyButton itemId={item.item_id} />,
+              <MarkAsSoldButton />,
               <ModifyButton itemId={item.item_id} />,
               <RemoveButton
                 itemId={item.item_id}

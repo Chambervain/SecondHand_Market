@@ -1,4 +1,5 @@
-import { Button, message } from "antd";
+import { Button, Tooltip, message } from "antd";
+import { CloseOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { deleteItem } from "../utils";
 
@@ -21,16 +22,11 @@ const RemoveButton = (props) => {
   };
 
   return (
-    <Button
-      loading={loading}
-      danger={true}
-      shape="round"
-      type="primary"
-      style={{ backgroundColor: "#9B0625" }}
-      onClick={handleRemove}
-    >
-      Remove
-    </Button>
+    <Tooltip title="Delete item">
+      <CloseOutlined loading={loading} onClick={handleRemove}>
+        Remove
+      </CloseOutlined>
+    </Tooltip>
   );
 };
 
