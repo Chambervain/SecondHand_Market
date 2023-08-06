@@ -8,7 +8,7 @@ import {
   EditOutlined,
 } from "@ant-design/icons";
 import ModifyButton from "./ModifyButton";
-import { getMyItems, modifyItem } from "../utils";
+import { getItemById, getMyItems, modifyItem } from "../utils";
 import MarkAsSoldButton from "./MarkAsSoldButton";
 import CardTitle from "./CardTitle";
 import RemoveButton from "./RemoveButton";
@@ -65,6 +65,25 @@ const MyOwnItems = () => {
     }
   };
 
+  const handleMarkAsSold = (itemId) => {
+    setLoading(true);
+    const updataItems = data.map((item) =>
+      item.item_id === itemId
+        ? { ...item, item_is_sold: !item.item_is_sold }
+        : item
+    );
+    setData(updataItems);
+    try {
+      let item = getItemById(itemId);
+      item.item_is_sold = !item.item_is_sold;
+      modifyItem(item, itemId);
+    } catch (error) {
+      message.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <List
       loading={loading}
@@ -90,7 +109,10 @@ const MyOwnItems = () => {
               />
             }
             actions={[
-              <MarkAsSoldButton />,
+              <MarkAsSoldButton
+                item={item}
+                handleMarkAsSold={handleMarkAsSold}
+              />,
               <ModifyButton itemId={item.item_id} />,
               <RemoveButton
                 itemId={item.item_id}
