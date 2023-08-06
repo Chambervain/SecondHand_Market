@@ -8,7 +8,7 @@ const layout = {
   wrapperCol: { span: 16 },
 };
 
-const ModificationForm = ({ itemId }) => {
+const ModificationForm = ({ itemId, handleModifySuccess }) => {
   const [loading, setLoading] = useState(false);
 
   const fileInputRef = React.createRef();
@@ -42,6 +42,8 @@ const ModificationForm = ({ itemId }) => {
     } finally {
       setLoading(false);
     }
+    console.log("Item modified successfully!");
+    handleModifySuccess();
   };
 
   return (

@@ -27,6 +27,11 @@ const MyOwnItems = () => {
     }
   };
 
+  // This callback function will be passed to the ModifyButton component
+  const handleModifySuccess = () => {
+    loadData(); // Call loadData to fetch updated data after successful modification
+  };
+
   return (
     <List
       loading={loading}
@@ -61,7 +66,10 @@ const MyOwnItems = () => {
               </div>
             }
             actions={[
-              <ModifyButton itemId={item.item_id} />,
+              <ModifyButton
+                itemId={item.item_id}
+                handleModifySuccess={handleModifySuccess}
+              />,
               <RemoveButton
                 itemId={item.item_id}
                 handleRemoveSuccess={loadData}
