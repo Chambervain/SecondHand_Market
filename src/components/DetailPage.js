@@ -285,6 +285,8 @@ class DetailPage extends React.Component {
   removeFromFavorites = async () => {
     // Remove the item from favorites and update the state and local storage
     const item = { ...this.state.data };
+    console.log("In remove from favorites");
+    console.log(item);
     try {
       // Call the backend API to remove the item from favorites
       await removeFromFavorites(item.item_id);
@@ -295,8 +297,8 @@ class DetailPage extends React.Component {
         JSON.parse(localStorage.getItem("favorites")) || [];
       const updatedFavorites = storedFavorites.filter(
         (favItem) =>
-          favItem.id !== item.id ||
-          favItem.fav_user_name !== this.state.currentUserName
+          favItem.item_id != item.id &&
+          favItem.fav_user_name != this.state.currentUserName
       );
       localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
     } catch (error) {
