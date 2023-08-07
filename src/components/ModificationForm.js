@@ -36,7 +36,7 @@ const ModificationForm = ({ item }) => {
     setLoading(true);
 
     try {
-      await modifyItem(formData, item.itemId);
+      await modifyItem(formData, item.item_id);
       message.success("Modification success");
     } catch (error) {
       message.error(error.message);
@@ -111,7 +111,7 @@ const ModificationForm = ({ item }) => {
           <Select.Option value="Household goods">Household goods</Select.Option>
         </Select>
       </Form.Item>
-      <Form.Item name="image" label="image" rules={[{ required: true }]}>
+      <Form.Item name="image" label="image">
         <input
           type="file"
           accept="image/png, image/jpeg"
