@@ -1,10 +1,10 @@
-import { ShoppingCartOutlined } from "@ant-design/icons";
+import { HeartOutlined } from "@ant-design/icons";
 import { Avatar, Button, Drawer, List, Tooltip, message } from "antd";
 import { useEffect, useState } from "react";
 import { getMyFavoriteItems } from "../utils";
 import { Link } from "react-router-dom";
 
-const FavCart = () => {
+const FavCart = ({ username }) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [cartVisible, setCartVisible] = useState(false);
@@ -42,11 +42,11 @@ const FavCart = () => {
         style={{
           color: "white",
         }}
-        icon={<ShoppingCartOutlined style={{ fontSize: 23 }} />}
+        icon={<HeartOutlined style={{ fontSize: 23 }} />}
         onClick={openDrawer}
       />
       <Drawer
-        title="My Favorite Cart"
+        title="My Favorites"
         placement="right"
         onClose={closeDrawer}
         open={cartVisible}
@@ -60,12 +60,12 @@ const FavCart = () => {
               <Tooltip title="Click to see details" color="geekblue">
                 <List.Item.Meta
                   avatar={
-                    <Link to={`/items/${item.item_id}`}>
+                    <Link to={`/items/${item.item_id}/${username}`}>
                       <Avatar size={60} src={item.item_image_urls[0]} />
                     </Link>
                   }
                   title={
-                    <Link to={`/items/${item.item_id}`}>
+                    <Link to={`/items/${item.item_id}/${username}`}>
                       <div>{item.item_name}</div>
                     </Link>
                   }

@@ -1,6 +1,9 @@
 import React from "react";
 import { Form, Input, InputNumber, Button, message, Select } from "antd";
 import { uploadItem } from "../utils";
+import { InboxOutlined } from "@ant-design/icons";
+import { Upload } from "antd";
+const { Dragger } = Upload;
 
 const layout = {
   // 表单左边是label，右边是wrapper
@@ -11,26 +14,28 @@ const layout = {
 class UploadItems extends React.Component {
   state = {
     loading: false,
+    fileList: [],
   };
 
-  fileInputRef = React.createRef();
+  handleFileChange = ({ fileList }) => {
+    this.setState({ fileList });
+  };
 
   // values没有文件信息
   handleSubmit = async (values) => {
     // formdata 可以处理文件信息，不能用json
     const formData = new FormData();
     // 从接水的桶fileInputRef中拿到文件信息
-    const { files } = this.fileInputRef.current;
+    const { fileList } = this.state;
+
     // files是一个数组
-    if (files.length > 5) {
+    if (fileList.length > 5) {
       message.error("You can at most upload 5 pictures.");
       return;
     }
-
-    for (let i = 0; i < files.length; i++) {
-      // 这个时候存的是文件reference，不是文件本身
-      formData.append("images", files[i]);
-    }
+    fileList.forEach((file) => {
+      formData.append("images", file.originFileObj);
+    });
 
     formData.append("name", values.name);
     formData.append("price", values.price);
@@ -55,6 +60,7 @@ class UploadItems extends React.Component {
   };
 
   render() {
+    const { fileList, onFileChange } = this.props;
     return (
       <Form
         // spread operator
@@ -114,15 +120,18 @@ class UploadItems extends React.Component {
           </Select>
         </Form.Item>
         <Form.Item name="picture" label="Picture" rules={[{ required: true }]}>
-          {/* 收集用户的文件信息 */}
-          <input
-            type="file"
-            accept="image/png, image/jpeg"
-            // 文件的信息handleSubmit不能帮你自动收集信息，所以需要用ref
-            // ref 是一个桶，里面装的是文件的信息
-            ref={this.fileInputRef}
-            multiple={true}
-          />
+          <Dragger fileList={fileList} onChange={this.handleFileChange}>
+            <p className="ant-upload-drag-icon">
+              <InboxOutlined />
+            </p>
+            <p className="ant-upload-text">
+              Click or drag file to this area to upload
+            </p>
+            <p className="ant-upload-hint">
+              Support for a single or bulk upload. Strictly prohibit from
+              uploading company data or other band files
+            </p>
+          </Dragger>
         </Form.Item>
         <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 12 }}>
           <Button type="primary" htmlType="submit" loading={this.state.loading}>

@@ -237,7 +237,6 @@ class DetailPage extends React.Component {
 
   componentDidMount = () => {
     this.loadData();
-    // call backend api to get current user name
     const currURL = window.location.href;
     const currentUserName = currURL.split("/")[5];
     const currentItemID = currURL.split("/")[4];
@@ -329,7 +328,7 @@ class DetailPage extends React.Component {
     } = dataSour;
 
     const colorSelected = getRandomIndexesFromArray(items, 2);
-    const { favorite, isAsked } = this.state;
+    const { favorite, isAsked, currentUserName } = this.state;
 
     let newArray = item_image_urls ? item_image_urls : [];
     return (
@@ -339,8 +338,12 @@ class DetailPage extends React.Component {
           <ProCard split="vertical">
             <ProCard headerBordered colSpan="70%">
               <Breadcrumb separator=">">
-                <Breadcrumb.Item>Home</Breadcrumb.Item>
-                <Breadcrumb.Item>Item</Breadcrumb.Item>
+                <Breadcrumb.Item>
+                  <Link to="/">
+                    <HomeOutlined />
+                    <span> Home </span>
+                  </Link>
+                </Breadcrumb.Item>
                 <Breadcrumb.Item>{item_name}</Breadcrumb.Item>
               </Breadcrumb>
               <Divider />
@@ -428,7 +431,7 @@ class DetailPage extends React.Component {
                       height: 60,
                     }}
                   >
-                    {!isAsked ? (
+                    {!isAsked && currentUserName != user_name ? (
                       <Button
                         type="primary"
                         shape="round"
@@ -464,16 +467,16 @@ class DetailPage extends React.Component {
                       footer={null}
                       onCancel={this.handleCancel}
                     >
-                      Click the button to send a message or write your own
-                      message.
+                      <span style={{ fontStyle: "italic", fontWeight: "bold" }}>
+                        Click the button to send a message or write your own
+                        message.
+                      </span>
+
                       <div>
                         <Button
                           shape="round"
                           style={{
-                            display: "flex",
-                            padding: 0,
-                            height: 20,
-                            fontSize: 12,
+                            height: 24,
                           }}
                           onClick={() =>
                             this.handleButtonSendMessage(
@@ -489,8 +492,7 @@ class DetailPage extends React.Component {
                         <Button
                           shape="round"
                           style={{
-                            height: 20,
-                            fontSize: 12,
+                            height: 24,
                           }}
                           onClick={() =>
                             this.handleButtonSendMessage(
@@ -501,14 +503,28 @@ class DetailPage extends React.Component {
                           Can I get a discount for this item?
                         </Button>
                       </div>
+                      <div>
+                        <Button
+                          shape="round"
+                          style={{
+                            height: 24,
+                          }}
+                          onClick={() =>
+                            this.handleButtonSendMessage(
+                              "When are you available for this item?"
+                            )
+                          }
+                        >
+                          When are you available for this item?
+                        </Button>
+                      </div>
+                      <br />
                       <Form preserve={false} onFinish={this.handleSubmit}>
                         <Form.Item name="content" label="Content">
-                          <Input.TextArea
-                            autoSize={{ minRows: 3, maxRows: 6 }}
-                          />
+                          <Input.TextArea size={{ size: "middle" }} />
                         </Form.Item>
                         <Form.Item
-                          wrapperCol={{ ...layout.wrapperCol, offset: 12 }}
+                          wrapperCol={{ ...layout.wrapperCol, offset: 10 }}
                         >
                           <Button
                             type="primary"
