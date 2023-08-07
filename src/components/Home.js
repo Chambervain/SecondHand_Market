@@ -53,7 +53,7 @@ const items = [
   },
 ];
 
-const Home = () => {
+const Home = ({ authed }) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [keyword, setKeyword] = useState("");
@@ -171,7 +171,13 @@ const Home = () => {
         dataSource={data}
         renderItem={(item) => (
           <List.Item>
-            <Link to={`/items/${item.item_id}/${username}`}>
+            <Link
+              to={
+                authed
+                  ? `/items/${item.item_id}/${username}`
+                  : `/items/${item.item_id}`
+              }
+            >
               <Card
                 hoverable
                 key={item.item_id}

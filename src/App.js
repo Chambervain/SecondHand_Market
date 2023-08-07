@@ -197,7 +197,7 @@ function App() {
     if (authed && key == 1) {
       return (
         <div>
-          <Home />
+          <Home authed={authed} />
         </div>
       );
     } else if (authed && key == 2) {
