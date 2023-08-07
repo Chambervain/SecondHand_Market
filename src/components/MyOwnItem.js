@@ -77,7 +77,8 @@ const MyOwnItems = () => {
               </div>
             }
             actions={[
-              <ModifyButton itemId={item.item_id} />,
+              // <ModifyButton itemId={item.item_id} />,
+              <ModifyButton item={item} />,
               <RemoveButton
                 itemId={item.item_id}
                 handleRemove={deleteItemSuccess}
@@ -154,7 +155,7 @@ const RemoveButton = (props) => {
       </Button>
       <Modal
         title="Confirm Remove"
-        visible={isModalVisible}
+        open={isModalVisible}
         onOk={handleConfirmRemove}
         onCancel={handleCancelRemove}
         okText="Remove"
