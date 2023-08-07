@@ -165,6 +165,23 @@ export const getMyFavoriteItems = () => {
   });
 };
 
+export const getAllChats = () => {
+  const authToken = localStorage.getItem("authToken");
+  const allChatsUrl = `${domain}/chats`;
+
+  return fetch(allChatsUrl, {
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  }).then((response) => {
+    if (response.status !== 200) {
+      throw Error("Fail to get all chats");
+    }
+
+    return response.json();
+  });
+};
+
 export const addToFavorites = (itemId) => {
   const authToken = localStorage.getItem("authToken");
   const addFavoriteItemUrl = `${domain}/favorite/${itemId}`;
@@ -194,6 +211,23 @@ export const removeFromFavorites = (itemId) => {
     if (response.status !== 200) {
       throw Error("Fail to delete favorite item");
     }
+  });
+};
+
+export const getAllMessages = (chat_id) => {
+  const authToken = localStorage.getItem("authToken");
+  const allMessagesUrl = `${domain}/messages/${chat_id}`;
+
+  return fetch(allMessagesUrl, {
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  }).then((response) => {
+    if (response.status !== 200) {
+      throw Error("Fail to get all messages");
+    }
+
+    return response.json();
   });
 };
 
@@ -243,6 +277,23 @@ export const markAsSold = (itemId) => {
   }).then((response) => {
     if (response.status !== 200) {
       throw Error("Fail to mark as sold");
+    }
+  });
+};
+
+export const reply = (data, chat_id) => {
+  const authToken = localStorage.getItem("authToken");
+  const replyUrl = `${domain}/reply/${chat_id}`;
+
+  return fetch(replyUrl, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+    body: data,
+  }).then((response) => {
+    if (response.status !== 200) {
+      throw Error("Fail to reply");
     }
   });
 };

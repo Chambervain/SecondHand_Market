@@ -7,6 +7,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./components/ErrorPage";
 import DetailPage from "./components/DetailPage";
 import UnauthedDetailPage from "./components/UnauthedDetailPage";
+import ChatBox from "./components/ChatBox";
+import PersonMessage from "./components/PersonMessage";
 
 const router = createBrowserRouter([
   {
@@ -21,6 +23,12 @@ const router = createBrowserRouter([
   {
     path: "items/:itemId",
     element: <UnauthedDetailPage />,
+  },
+  { path: "chatbox/:userName", element: <ChatBox /> },
+
+  {
+    path: "chats/:chat_id",
+    element: <PersonMessage />,
   },
 ]);
 

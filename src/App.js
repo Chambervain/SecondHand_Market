@@ -14,6 +14,8 @@ import UploadItems from "./components/UploadItems";
 import FavCart from "./components/FavCart";
 import axios from "axios";
 import { getCurrentUserName } from "./utils";
+import ChatBox from "./components/ChatBox";
+import PersonMessage from "./components/PersonMessage";
 
 const { Header, Content } = Layout;
 
@@ -48,13 +50,15 @@ function App() {
     setIsLocationReady(true);
   };
 
-  const handleLoginSuccess = (token) => {
+  const handleLoginSuccess = (token, username) => {
     localStorage.setItem("authToken", token);
+    localStorage.setItem("username", username);
     setAuthed(true);
   };
 
   const handleLogOut = () => {
     localStorage.removeItem("authToken");
+    localStorage.removeItem("username");
     setAuthed(false);
   };
 
