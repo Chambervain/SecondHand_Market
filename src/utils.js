@@ -199,9 +199,9 @@ export const removeFromFavorites = (itemId) => {
 
 export const askForSeller = (data, item_id) => {
   const authToken = localStorage.getItem("authToken");
-  const uploadItemUrl = `${domain}/ask/${item_id}`;
+  const askForSellerUrl = `${domain}/ask/${item_id}`;
 
-  return fetch(uploadItemUrl, {
+  return fetch(askForSellerUrl, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${authToken}`,
@@ -216,9 +216,9 @@ export const askForSeller = (data, item_id) => {
 
 export const getCurrentUserName = () => {
   const authToken = localStorage.getItem("authToken");
-  const myFavoriteItemsUrl = `${domain}/username`;
+  const getCurrentUserNameUrl = `${domain}/username`;
 
-  return fetch(myFavoriteItemsUrl, {
+  return fetch(getCurrentUserNameUrl, {
     headers: {
       Authorization: `Bearer ${authToken}`,
     },
@@ -228,5 +228,21 @@ export const getCurrentUserName = () => {
     }
 
     return response.json();
+  });
+};
+
+export const markAsSold = (itemId) => {
+  const authToken = localStorage.getItem("authToken");
+  const markAsSoldUrl = `${domain}/item/${itemId}/soldOrRelist`;
+
+  return fetch(markAsSoldUrl, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  }).then((response) => {
+    if (response.status !== 200) {
+      throw Error("Fail to mark as sold");
+    }
   });
 };

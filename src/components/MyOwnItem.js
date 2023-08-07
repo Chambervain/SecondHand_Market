@@ -5,11 +5,13 @@ import {
   DeleteTwoTone,
   LeftCircleOutlined,
   RightCircleOutlined,
+  SettingOutlined,
+  EditOutlined,
 } from "@ant-design/icons";
 import ModifyButton from "./ModifyButton";
-import { getMyItems, deleteItem } from "../utils";
-// import RemoveButton from "./RemoveButton";
-import { async } from "q";
+import { getMyItems, deleteItem, markAsSold } from "../utils";
+import MarkAsSoldButton from "./MarkAsSoldButton";
+import CardTitle from "./CardTitle";
 
 const MyOwnItems = () => {
   const [loading, setLoading] = useState(false);
@@ -47,6 +49,22 @@ const MyOwnItems = () => {
       setLoading(false);
     }
   };
+  const handleMarkAsSold = async (itemId) => {
+    setLoading(true);
+    const updataItems = data.map((item) =>
+      item.item_id === itemId
+        ? { ...item, item_is_sold: !item.item_is_sold }
+        : item
+    );
+    setData(updataItems);
+    try {
+      await markAsSold(itemId);
+    } catch (error) {
+      message.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <List
@@ -66,23 +84,17 @@ const MyOwnItems = () => {
           <Card
             key={item.item_id}
             title={
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Text ellipsis={true} style={{ maxWidth: 150 }}>
-                  {item.item_name}
-                </Text>
-                <Text ellipsis={true} style={{ maxWidth: 150 }}>
-                  ${item.item_price}
-                </Text>
-              </div>
+              <CardTitle
+                itemName={item.item_name}
+                itemPrice={item.item_price}
+                isSold={item.item_is_sold}
+              />
             }
             actions={[
-              // <ModifyButton itemId={item.item_id} />,
+              <MarkAsSoldButton
+                item={item}
+                handleMarkAsSold={handleMarkAsSold}
+              />,
               <ModifyButton
                 item={item}
                 handleModifySuccess={handleModifySuccess}
@@ -106,7 +118,9 @@ const MyOwnItems = () => {
                     src={url}
                     width="100%"
                     height="250px"
-                    style={{ objectFit: "cover" }}
+                    style={{
+                      objectFit: "contain",
+                    }}
                   />
                 </div>
               ))}
@@ -123,20 +137,7 @@ const RemoveButton = (props) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handleRemoveItem = async () => {
-    // const { itemId, handleRemoveSuccess } = props;
-
-    // setLoading(true);
-    // props.handleRemove(props.itemId);
     setIsModalVisible(true);
-
-    // try {
-    //   await deleteItem(itemId);
-    //   handleRemoveSuccess();
-    // } catch (error) {
-    //   message.error(error.message);
-    // } finally {
-    //   setLoading(false);
-    // }
   };
 
   const handleConfirmRemove = async () => {
@@ -151,7 +152,7 @@ const RemoveButton = (props) => {
 
   return (
     <div>
-      <Button
+      {/* <Button
         // loading={loading}
         danger={true}
         shape="round"
@@ -160,7 +161,12 @@ const RemoveButton = (props) => {
         onClick={handleRemoveItem}
       >
         Remove
-      </Button>
+      </Button> */}
+      <Tooltip title="Delete item">
+        <CloseOutlined loading={loading} onClick={handleRemoveItem}>
+          Remove
+        </CloseOutlined>
+      </Tooltip>
       <Modal
         title="Confirm Remove"
         open={isModalVisible}

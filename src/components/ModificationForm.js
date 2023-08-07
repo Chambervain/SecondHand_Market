@@ -32,7 +32,6 @@ const ModificationForm = ({ item, handleModifySuccess }) => {
     formData.append("description", values.description);
     formData.append("condition", values.condition);
     formData.append("category", values.category);
-
     setLoading(true);
 
     try {
