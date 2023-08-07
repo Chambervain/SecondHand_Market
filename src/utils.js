@@ -213,3 +213,19 @@ export const askForSeller = (data, item_id) => {
     }
   });
 };
+
+export const markAsSold = (itemId) => {
+  const authToken = localStorage.getItem("authToken");
+  const addFavoriteItemUrl = `${domain}/item/${itemId}/soldOrRelist`;
+
+  return fetch(addFavoriteItemUrl, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  }).then((response) => {
+    if (response.status !== 200) {
+      throw Error("Fail to mark as sold");
+    }
+  });
+};

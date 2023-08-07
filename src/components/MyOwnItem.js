@@ -8,7 +8,7 @@ import {
   EditOutlined,
 } from "@ant-design/icons";
 import ModifyButton from "./ModifyButton";
-import { getItemById, getMyItems, modifyItem } from "../utils";
+import { getItemById, getMyItems, markAsSold } from "../utils";
 import MarkAsSoldButton from "./MarkAsSoldButton";
 import CardTitle from "./CardTitle";
 import RemoveButton from "./RemoveButton";
@@ -65,7 +65,7 @@ const MyOwnItems = () => {
     }
   };
 
-  const handleMarkAsSold = (itemId) => {
+  const handleMarkAsSold = async (itemId) => {
     setLoading(true);
     const updataItems = data.map((item) =>
       item.item_id === itemId
@@ -74,9 +74,7 @@ const MyOwnItems = () => {
     );
     setData(updataItems);
     try {
-      let item = getItemById(itemId);
-      item.item_is_sold = !item.item_is_sold;
-      modifyItem(item, itemId);
+      await markAsSold(itemId);
     } catch (error) {
       message.error(error.message);
     } finally {
@@ -105,7 +103,7 @@ const MyOwnItems = () => {
               <CardTitle
                 itemName={item.item_name}
                 itemPrice={item.item_price}
-                isSold={item.is_sold}
+                isSold={item.item_is_sold}
               />
             }
             actions={[
