@@ -1,17 +1,15 @@
 import { useState, useEffect } from "react";
 import { List, Card, Carousel, Image, message, Button, Modal } from "antd";
-import Text from "antd/lib/typography/Text";
 import {
-  DeleteTwoTone,
   LeftCircleOutlined,
   RightCircleOutlined,
-  SettingOutlined,
-  EditOutlined,
+  CloseOutlined,
 } from "@ant-design/icons";
 import ModifyButton from "./ModifyButton";
 import { getMyItems, deleteItem, markAsSold } from "../utils";
 import MarkAsSoldButton from "./MarkAsSoldButton";
 import CardTitle from "./CardTitle";
+import { Tooltip } from "antd";
 
 const MyOwnItems = () => {
   const [loading, setLoading] = useState(false);
