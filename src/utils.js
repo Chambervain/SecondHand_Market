@@ -27,8 +27,10 @@ export const register = (credential) => {
   });
 };
 
-export const getAllItems = () => {
+export const getAllItems = (lat, lon) => {
   const listItemsUrl = new URL(`${domain}/items`);
+  listItemsUrl.searchParams.append("lat", lat);
+  listItemsUrl.searchParams.append("lon", lon);
   return fetch(listItemsUrl).then((response) => {
     if (response.status !== 200) {
       throw Error("Fail to get all items");
@@ -117,8 +119,10 @@ export const getMyItems = () => {
   });
 };
 
-export const getItemsByCategory = (category) => {
+export const getItemsByCategory = (category, lat, lon) => {
   const listItemsUrl = new URL(`${domain}/items/${category}`);
+  listItemsUrl.searchParams.append("lat", lat);
+  listItemsUrl.searchParams.append("lon", lon);
 
   return fetch(listItemsUrl).then((response) => {
     if (response.status !== 200) {
@@ -129,9 +133,11 @@ export const getItemsByCategory = (category) => {
   });
 };
 
-export const searchItemsByKeyword = (keyword) => {
+export const searchItemsByKeyword = (keyword, lat, lon) => {
   const searchItemsUrl = new URL(`${domain}/search`);
   searchItemsUrl.searchParams.append("keyword", keyword);
+  searchItemsUrl.searchParams.append("lat", lat);
+  searchItemsUrl.searchParams.append("lon", lon);
 
   return fetch(searchItemsUrl).then((response) => {
     if (response.status !== 200) {

@@ -2,10 +2,10 @@ import {
   ContainerOutlined,
   DesktopOutlined,
   PieChartOutlined,
-  EditFilled,
 } from "@ant-design/icons";
 import { Menu, Layout } from "antd";
-import React, { useState } from "react";
+import React from "react";
+import MusicPlayer from "./MusicPlayer";
 
 function getItem(label, key, icon, children, type) {
   return {
@@ -42,7 +42,7 @@ const NavigationMenu = ({ renderPage }) => {
           justifyContent: "center",
         }}
       >
-        <EditFilled />
+        <MusicPlayer />
         <span
           style={{
             marginLeft: 15,

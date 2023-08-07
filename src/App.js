@@ -115,7 +115,7 @@ function App() {
         >
           <HomeOutlined
             style={{
-              width: 3000,
+              width: 960,
               fontWeight: 600,
               color: "white",
               fontSize: 25,
@@ -143,7 +143,7 @@ function App() {
         >
           <div
             style={{
-              width: 900,
+              width: 960,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -197,7 +197,13 @@ function App() {
     if (authed && key == 1) {
       return (
         <div>
-          <Home authed={authed} />
+          {isLocationReady && (
+            <Home
+              authed={authed}
+              lat={curLocation.latitude}
+              lon={curLocation.longitude}
+            />
+          )}
         </div>
       );
     } else if (authed && key == 2) {
@@ -205,11 +211,17 @@ function App() {
     } else if (authed && key == 3) {
       return (
         <div>
-          <UploadItems />
+          <UploadItems lat={curLocation.latitude} lon={curLocation.longitude} />
         </div>
       );
     } else {
-      return <Home />;
+      return (
+        <Home
+          authed={authed}
+          lat={curLocation.latitude}
+          lon={curLocation.longitude}
+        />
+      );
     }
   };
 

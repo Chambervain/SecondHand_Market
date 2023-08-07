@@ -8,7 +8,8 @@ const layout = {
   wrapperCol: { span: 16 },
 };
 
-const ModificationForm = ({ itemId, handleModifySuccess }) => {
+const ModificationForm = ({ item, handleModifySuccess }) => {
+  console.log(item);
   const [loading, setLoading] = useState(false);
 
   const fileInputRef = React.createRef();
@@ -35,7 +36,7 @@ const ModificationForm = ({ itemId, handleModifySuccess }) => {
     setLoading(true);
 
     try {
-      await modifyItem(formData, itemId);
+      await modifyItem(formData, item.item_id);
       message.success("Modification success");
     } catch (error) {
       message.error(error.message);
@@ -53,20 +54,35 @@ const ModificationForm = ({ itemId, handleModifySuccess }) => {
       onFinish={handleSubmit}
       style={{ maxWidth: 1000, margin: "auto" }}
     >
-      <Form.Item name="name" label="name" rules={[{ required: true }]}>
+      <Form.Item
+        name="name"
+        label="name"
+        rules={[{ required: true }]}
+        initialValue={item.item_name}
+      >
         <Input name="name" />
       </Form.Item>
-      <Form.Item name="price" label="price" rules={[{ required: true }]}>
+      <Form.Item
+        name="price"
+        label="price"
+        rules={[{ required: true }]}
+        initialValue={item.item_price}
+      >
         <InputNumber addonAfter="$" />
       </Form.Item>
       <Form.Item
         name="description"
         label="description"
         rules={[{ required: true }]}
+        initialValue={item.item_description}
       >
         <Input.TextArea name="description" />
       </Form.Item>
-      <Form.Item name="condition" label="condition">
+      <Form.Item
+        name="condition"
+        label="condition"
+        initialValue={item.item_condition}
+      >
         <Select>
           <Select.Option value="New With Tags (NWT)">
             New With Tags (NWT)
@@ -82,7 +98,12 @@ const ModificationForm = ({ itemId, handleModifySuccess }) => {
           </Select.Option>
         </Select>
       </Form.Item>
-      <Form.Item name="category" label="category" rules={[{ required: true }]}>
+      <Form.Item
+        name="category"
+        label="category"
+        rules={[{ required: true }]}
+        initialValue={item.item_category}
+      >
         <Select>
           <Select.Option value="Clothing">Clothing</Select.Option>
           <Select.Option value="Electronics">Electronics</Select.Option>
@@ -92,7 +113,7 @@ const ModificationForm = ({ itemId, handleModifySuccess }) => {
           <Select.Option value="Household goods">Household goods</Select.Option>
         </Select>
       </Form.Item>
-      <Form.Item name="image" label="image" rules={[{ required: true }]}>
+      <Form.Item name="image" label="image">
         <input
           type="file"
           accept="image/png, image/jpeg"

@@ -1,10 +1,15 @@
 import { useState, useEffect } from "react";
-import { List, Card, Carousel, Image, message } from "antd";
+import { List, Card, Carousel, Image, message, Button, Modal } from "antd";
 import Text from "antd/lib/typography/Text";
-import { LeftCircleOutlined, RightCircleOutlined } from "@ant-design/icons";
+import {
+  DeleteTwoTone,
+  LeftCircleOutlined,
+  RightCircleOutlined,
+} from "@ant-design/icons";
 import ModifyButton from "./ModifyButton";
-import { getMyItems } from "../utils";
-import RemoveButton from "./RemoveButton";
+import { getMyItems, deleteItem } from "../utils";
+// import RemoveButton from "./RemoveButton";
+import { async } from "q";
 
 const MyOwnItems = () => {
   const [loading, setLoading] = useState(false);
@@ -30,6 +35,17 @@ const MyOwnItems = () => {
   // This callback function will be passed to the ModifyButton component
   const handleModifySuccess = () => {
     loadData(); // Call loadData to fetch updated data after successful modification
+  };
+
+  const deleteItemSuccess = async (itemId) => {
+    try {
+      await deleteItem(itemId);
+      setData((prevData) => prevData.filter((item) => item.item_id !== itemId));
+    } catch (error) {
+      message.error(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -66,13 +82,14 @@ const MyOwnItems = () => {
               </div>
             }
             actions={[
+              // <ModifyButton itemId={item.item_id} />,
               <ModifyButton
-                itemId={item.item_id}
+                item={item}
                 handleModifySuccess={handleModifySuccess}
               />,
               <RemoveButton
                 itemId={item.item_id}
-                handleRemoveSuccess={loadData}
+                handleRemove={deleteItemSuccess}
               />,
             ]}
           >
@@ -98,6 +115,63 @@ const MyOwnItems = () => {
         </List.Item>
       )}
     />
+  );
+};
+
+const RemoveButton = (props) => {
+  const [loading, setLoading] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const handleRemoveItem = async () => {
+    // const { itemId, handleRemoveSuccess } = props;
+
+    // setLoading(true);
+    // props.handleRemove(props.itemId);
+    setIsModalVisible(true);
+
+    // try {
+    //   await deleteItem(itemId);
+    //   handleRemoveSuccess();
+    // } catch (error) {
+    //   message.error(error.message);
+    // } finally {
+    //   setLoading(false);
+    // }
+  };
+
+  const handleConfirmRemove = async () => {
+    setIsModalVisible(false);
+    setLoading(true);
+    props.handleRemove(props.itemId);
+  };
+
+  const handleCancelRemove = () => {
+    setIsModalVisible(false);
+  };
+
+  return (
+    <div>
+      <Button
+        // loading={loading}
+        danger={true}
+        shape="round"
+        type="primary"
+        style={{ backgroundColor: "#9B0625" }}
+        onClick={handleRemoveItem}
+      >
+        Remove
+      </Button>
+      <Modal
+        title="Confirm Remove"
+        open={isModalVisible}
+        onOk={handleConfirmRemove}
+        onCancel={handleCancelRemove}
+        okText="Remove"
+        cancelText="Cancel"
+      >
+        <p>Are you sure you want to remove this item?</p>
+      </Modal>
+    </div>
   );
 };
 

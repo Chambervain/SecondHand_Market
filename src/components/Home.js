@@ -53,16 +53,17 @@ const items = [
   },
 ];
 
-const Home = ({ authed }) => {
+const Home = (props) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [keyword, setKeyword] = useState("");
   const [username, setUsername] = useState("");
+  const { authed, lat, lon } = props;
 
   //The home component would render after gaining lat or lon
   useEffect(() => {
     setLoading(true);
-    getAllItems()
+    getAllItems(lat, lon)
       .then((data) => {
         setData(data);
       })
@@ -72,7 +73,7 @@ const Home = ({ authed }) => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [lat, lon]);
 
   // get current username by calling backend api
   useEffect(() => {
@@ -95,7 +96,7 @@ const Home = ({ authed }) => {
     setLoading(true);
 
     try {
-      const data = await searchItemsByKeyword(keyword);
+      const data = await searchItemsByKeyword(keyword, lat, lon);
       setData(data);
     } catch (error) {
       message.error(error.message);
@@ -112,7 +113,7 @@ const Home = ({ authed }) => {
     console.log(e.key);
 
     try {
-      const data = await getItemsByCategory(e.key);
+      const data = await getItemsByCategory(e.key, lat, lon);
       setData(data);
     } catch (error) {
       message.error(error.message);
