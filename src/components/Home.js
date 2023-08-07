@@ -3,6 +3,7 @@ import {
   getAllItems,
   getItemsByCategory,
   searchItemsByKeyword,
+  getCurrentUserName,
 } from "../utils";
 import {
   Card,
@@ -56,7 +57,8 @@ const Home = (props) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [keyword, setKeyword] = useState("");
-  const { lat, lon } = props;
+  const [username, setUsername] = useState("");
+  const { authed, lat, lon } = props;
 
   //The home component would render after gaining lat or lon
   useEffect(() => {
@@ -66,12 +68,24 @@ const Home = (props) => {
         setData(data);
       })
       .catch((err) => {
+        // avoid annoying error message
         // message.error(err.message);
       })
       .finally(() => {
         setLoading(false);
       });
   }, [lat, lon]);
+
+  // get current username by calling backend api
+  useEffect(() => {
+    getCurrentUserName()
+      .then((data) => {
+        setUsername(data.username);
+      })
+      .catch((err) => {
+        // message.error(err.message);
+      });
+  }, []);
 
   const onSearch = async (value) => {
     setKeyword(value);
@@ -159,7 +173,13 @@ const Home = (props) => {
         dataSource={data}
         renderItem={(item) => (
           <List.Item>
-            <Link to={`/items/${item.item_id}`}>
+            <Link
+              to={
+                authed
+                  ? `/items/${item.item_id}/${username}`
+                  : `/items/${item.item_id}`
+              }
+            >
               <Card
                 hoverable
                 key={item.item_id}

@@ -13,12 +13,14 @@ import MyOwnItems from "./components/MyOwnItem";
 import UploadItems from "./components/UploadItems";
 import FavCart from "./components/FavCart";
 import axios from "axios";
+import { getCurrentUserName } from "./utils";
 
 const { Header, Content } = Layout;
 
 function App() {
   const [authed, setAuthed] = useState(false);
   const [key, setKey] = useState(1);
+  const [username, setUsername] = useState("");
   const [curLocation, setCurLocation] = useState({});
   const [isLocationReady, setIsLocationReady] = useState(false);
 
@@ -26,6 +28,17 @@ function App() {
     getLocation();
     const authToken = localStorage.getItem("authToken");
     setAuthed(authToken !== null);
+  }, []);
+
+  // call api to get current username
+  useEffect(() => {
+    getCurrentUserName()
+      .then((data) => {
+        setUsername(data.username);
+      })
+      .catch((err) => {
+        // message.error(err.message);
+      });
   }, []);
 
   const getLocation = async () => {
@@ -152,7 +165,7 @@ function App() {
               justifyContent: "center",
             }}
           >
-            <FavCart />
+            <FavCart username={username} />
           </div>
           <div
             style={{
@@ -185,7 +198,11 @@ function App() {
       return (
         <div>
           {isLocationReady && (
-            <Home lat={curLocation.latitude} lon={curLocation.longitude} />
+            <Home
+              authed={authed}
+              lat={curLocation.latitude}
+              lon={curLocation.longitude}
+            />
           )}
         </div>
       );
@@ -194,16 +211,17 @@ function App() {
     } else if (authed && key == 3) {
       return (
         <div>
-          {isLocationReady && (
-            <UploadItems
-              lat={curLocation.latitude}
-              lon={curLocation.longitude}
-            />
-          )}
+          <UploadItems lat={curLocation.latitude} lon={curLocation.longitude} />
         </div>
       );
     } else {
-      return <Home lat={curLocation.latitude} lon={curLocation.longitude} />;
+      return (
+        <Home
+          authed={authed}
+          lat={curLocation.latitude}
+          lon={curLocation.longitude}
+        />
+      );
     }
   };
 

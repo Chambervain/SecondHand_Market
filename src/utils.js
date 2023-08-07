@@ -213,3 +213,20 @@ export const askForSeller = (data, item_id) => {
     }
   });
 };
+
+export const getCurrentUserName = () => {
+  const authToken = localStorage.getItem("authToken");
+  const myFavoriteItemsUrl = `${domain}/username`;
+
+  return fetch(myFavoriteItemsUrl, {
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  }).then((response) => {
+    if (response.status !== 200) {
+      throw Error("Fail to get current user name");
+    }
+
+    return response.json();
+  });
+};

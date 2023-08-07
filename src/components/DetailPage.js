@@ -29,7 +29,12 @@ import GoogleApiWrapper from "./GoogleApiWrapper";
 import { getItemById } from "../utils";
 import { TagOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import { addToFavorites, removeFromFavorites, askForSeller } from "../utils";
+import {
+  addToFavorites,
+  removeFromFavorites,
+  askForSeller,
+  getCurrentUserName,
+} from "../utils";
 import { Form, Input } from "antd";
 
 const location = {
@@ -95,6 +100,7 @@ class DetailPage extends React.Component {
     favorite: false,
     modalVisible: false,
     isAsked: false,
+    currentUserName: "",
   };
 
   handleCancel = () => {
@@ -116,7 +122,7 @@ class DetailPage extends React.Component {
 
       // Update local storage
       const storedAsked = JSON.parse(localStorage.getItem("asked")) || [];
-      storedAsked.push(item);
+      storedAsked.push({ ...item, ask_user_name: this.state.currentUserName });
       localStorage.setItem("asked", JSON.stringify(storedAsked));
 
       message.success("Message sent successfully");
@@ -137,7 +143,7 @@ class DetailPage extends React.Component {
 
       // Update local storage
       const storedAsked = JSON.parse(localStorage.getItem("asked")) || [];
-      storedAsked.push(item);
+      storedAsked.push({ ...item, ask_user_name: this.state.currentUserName });
       localStorage.setItem("asked", JSON.stringify(storedAsked));
 
       message.success("Message sent successfully");
@@ -231,15 +237,27 @@ class DetailPage extends React.Component {
 
   componentDidMount = () => {
     this.loadData();
+    const currURL = window.location.href;
+    const currentUserName = currURL.split("/")[5];
+    const currentItemID = currURL.split("/")[4];
+
     const storedFavorites = JSON.parse(localStorage.getItem("favorites")) || [];
     const storedAsked = JSON.parse(localStorage.getItem("asked")) || [];
-    const item = { ...this.state.data };
+
     const isFavorite = storedFavorites.some(
-      (favItem) => favItem.id === item.item_id
+      (favItem) =>
+        favItem.item_id == currentItemID &&
+        favItem.fav_user_name === currentUserName
     );
-    const isAsked = storedAsked.some((askedItem) => askedItem.id === item.id);
+    const isAsked = storedAsked.some(
+      (askedItem) =>
+        askedItem.item_id == currentItemID &&
+        askedItem.ask_user_name === currentUserName
+    );
+
     this.setState({ favorite: isFavorite });
     this.setState({ isAsked: isAsked });
+    this.setState({ currentUserName: currentUserName });
   };
 
   addToFavorites = async () => {
@@ -253,7 +271,10 @@ class DetailPage extends React.Component {
       // Update local storage
       const storedFavorites =
         JSON.parse(localStorage.getItem("favorites")) || [];
-      storedFavorites.push(item);
+      storedFavorites.push({
+        ...item,
+        fav_user_name: this.state.currentUserName,
+      });
       localStorage.setItem("favorites", JSON.stringify(storedFavorites));
     } catch (error) {
       console.error("Error adding to favorites:", error);
@@ -263,6 +284,8 @@ class DetailPage extends React.Component {
   removeFromFavorites = async () => {
     // Remove the item from favorites and update the state and local storage
     const item = { ...this.state.data };
+    console.log("In remove from favorites");
+    console.log(item);
     try {
       // Call the backend API to remove the item from favorites
       await removeFromFavorites(item.item_id);
@@ -272,7 +295,9 @@ class DetailPage extends React.Component {
       const storedFavorites =
         JSON.parse(localStorage.getItem("favorites")) || [];
       const updatedFavorites = storedFavorites.filter(
-        (favItem) => favItem.id !== item.id
+        (favItem) =>
+          favItem.item_id != item.id &&
+          favItem.fav_user_name != this.state.currentUserName
       );
       localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
     } catch (error) {
@@ -303,7 +328,7 @@ class DetailPage extends React.Component {
     } = dataSour;
 
     const colorSelected = getRandomIndexesFromArray(items, 2);
-    const { favorite, isAsked } = this.state;
+    const { favorite, isAsked, currentUserName } = this.state;
 
     let newArray = item_image_urls ? item_image_urls : [];
     return (
@@ -313,8 +338,12 @@ class DetailPage extends React.Component {
           <ProCard split="vertical">
             <ProCard headerBordered colSpan="70%">
               <Breadcrumb separator=">">
-                <Breadcrumb.Item>Home</Breadcrumb.Item>
-                <Breadcrumb.Item>Item</Breadcrumb.Item>
+                <Breadcrumb.Item>
+                  <Link to="/">
+                    <HomeOutlined />
+                    <span> Home </span>
+                  </Link>
+                </Breadcrumb.Item>
                 <Breadcrumb.Item>{item_name}</Breadcrumb.Item>
               </Breadcrumb>
               <Divider />
@@ -402,7 +431,7 @@ class DetailPage extends React.Component {
                       height: 60,
                     }}
                   >
-                    {!isAsked ? (
+                    {!isAsked && currentUserName != user_name ? (
                       <Button
                         type="primary"
                         shape="round"
@@ -438,16 +467,16 @@ class DetailPage extends React.Component {
                       footer={null}
                       onCancel={this.handleCancel}
                     >
-                      Click the button to send a message or write your own
-                      message.
+                      <span style={{ fontStyle: "italic", fontWeight: "bold" }}>
+                        Click the button to send a message or write your own
+                        message.
+                      </span>
+
                       <div>
                         <Button
                           shape="round"
                           style={{
-                            display: "flex",
-                            padding: 0,
-                            height: 20,
-                            fontSize: 12,
+                            height: 24,
                           }}
                           onClick={() =>
                             this.handleButtonSendMessage(
@@ -463,8 +492,7 @@ class DetailPage extends React.Component {
                         <Button
                           shape="round"
                           style={{
-                            height: 20,
-                            fontSize: 12,
+                            height: 24,
                           }}
                           onClick={() =>
                             this.handleButtonSendMessage(
@@ -475,14 +503,28 @@ class DetailPage extends React.Component {
                           Can I get a discount for this item?
                         </Button>
                       </div>
+                      <div>
+                        <Button
+                          shape="round"
+                          style={{
+                            height: 24,
+                          }}
+                          onClick={() =>
+                            this.handleButtonSendMessage(
+                              "When are you available for this item?"
+                            )
+                          }
+                        >
+                          When are you available for this item?
+                        </Button>
+                      </div>
+                      <br />
                       <Form preserve={false} onFinish={this.handleSubmit}>
                         <Form.Item name="content" label="Content">
-                          <Input.TextArea
-                            autoSize={{ minRows: 3, maxRows: 6 }}
-                          />
+                          <Input.TextArea size={{ size: "middle" }} />
                         </Form.Item>
                         <Form.Item
-                          wrapperCol={{ ...layout.wrapperCol, offset: 12 }}
+                          wrapperCol={{ ...layout.wrapperCol, offset: 10 }}
                         >
                           <Button
                             type="primary"

@@ -6,6 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./components/ErrorPage";
 import DetailPage from "./components/DetailPage";
+import UnauthedDetailPage from "./components/UnauthedDetailPage";
 
 const router = createBrowserRouter([
   {
@@ -14,8 +15,12 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: "items/:itemId",
+    path: "items/:itemId/:userName",
     element: <DetailPage />,
+  },
+  {
+    path: "items/:itemId",
+    element: <UnauthedDetailPage />,
   },
 ]);
 
