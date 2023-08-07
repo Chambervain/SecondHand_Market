@@ -68,7 +68,8 @@ const Home = (props) => {
         setData(data);
       })
       .catch((err) => {
-        message.error(err.message);
+        // avoid annoying error message
+        // message.error(err.message);
       })
       .finally(() => {
         setLoading(false);
