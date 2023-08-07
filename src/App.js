@@ -17,6 +17,8 @@ import { HomeOutlined } from "@ant-design/icons";
 import MyOwnItems from "./components/MyOwnItem";
 import UploadItems from "./components/UploadItems";
 import DetailPage from "./components/DetailPage";
+import ChatBox from "./components/ChatBox";
+import PersonMessage from "./components/PersonMessage";
 
 const { Header, Content } = Layout;
 
@@ -30,13 +32,15 @@ function App() {
     setAuthed(authToken !== null);
   }, []);
 
-  const handleLoginSuccess = (token) => {
+  const handleLoginSuccess = (token, username) => {
     localStorage.setItem("authToken", token);
+    localStorage.setItem("username", username);
     setAuthed(true);
   };
 
   const handleLogOut = () => {
     localStorage.removeItem("authToken");
+    localStorage.removeItem("username");
     setAuthed(false);
   };
 

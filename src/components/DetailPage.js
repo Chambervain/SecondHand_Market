@@ -21,6 +21,7 @@ import {
   HomeOutlined,
   CommentOutlined,
   HeartOutlined,
+  MailOutlined,
 } from "@ant-design/icons";
 import AliceCarousel from "react-alice-carousel";
 import "react-alice-carousel/lib/alice-carousel.css";
@@ -129,7 +130,7 @@ class DetailPage extends React.Component {
   };
 
   ////////////////////////////////////////////////////RENDER HEAD CONTENT//////////////////////////////////////////////////////
-  renderHeaderContent = () => {
+  renderHeaderContent = (user_name) => {
     return (
       <Header
         style={{
@@ -154,6 +155,25 @@ class DetailPage extends React.Component {
                 color: "white",
               }}
               icon={<HomeOutlined style={{ fontSize: 25 }} />}
+            />
+          </div>
+        </Link>
+
+        <Link to={`/chatbox/${user_name}`}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: 60,
+            }}
+          >
+            <Button
+              type="text"
+              style={{
+                color: "white",
+              }}
+              icon={<MailOutlined style={{ fontSize: 25 }} />}
             />
           </div>
         </Link>
@@ -188,11 +208,11 @@ class DetailPage extends React.Component {
     } = dataSour;
 
     const colorSelected = getRandomIndexesFromArray(items, 2);
-
+    const host_name = localStorage.getItem("username");
     let newArray = item_image_urls ? item_image_urls : [];
     return (
       <Layout>
-        {this.renderHeaderContent()}
+        {this.renderHeaderContent(host_name)}
         <Content>
           <ProCard split="vertical">
             <ProCard headerBordered colSpan="70%">

@@ -142,3 +142,71 @@ export const searchItemsByKeyword = (keyword) => {
     return response.json();
   });
 };
+
+export const getAllChats = () => {
+  const authToken = localStorage.getItem("authToken");
+  const myItemsUrl = `${domain}/chats`;
+
+  return fetch(myItemsUrl, {
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  }).then((response) => {
+    if (response.status !== 200) {
+      throw Error("Fail to get all chats");
+    }
+
+    return response.json();
+  });
+};
+
+export const getAllMessages = (chat_id) => {
+  const authToken = localStorage.getItem("authToken");
+  const myItemsUrl = `${domain}/messages/${chat_id}`;
+
+  return fetch(myItemsUrl, {
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  }).then((response) => {
+    if (response.status !== 200) {
+      throw Error("Fail to get all messages");
+    }
+
+    return response.json();
+  });
+};
+
+export const askForSeller = (data, item_id) => {
+  const authToken = localStorage.getItem("authToken");
+  const uploadItemUrl = `${domain}/ask/${item_id}`;
+
+  return fetch(uploadItemUrl, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+    body: data,
+  }).then((response) => {
+    if (response.status !== 200) {
+      throw Error("Fail to ask seller");
+    }
+  });
+};
+
+export const reply = (data, chat_id) => {
+  const authToken = localStorage.getItem("authToken");
+  const uploadItemUrl = `${domain}/reply/${chat_id}`;
+
+  return fetch(uploadItemUrl, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+    body: data,
+  }).then((response) => {
+    if (response.status !== 200) {
+      throw Error("Fail to reply");
+    }
+  });
+};

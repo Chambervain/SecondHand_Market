@@ -1,7 +1,6 @@
 import { Button, Modal, Form, Input, message, Space } from "antd";
 import React, { useState } from "react";
 import { login } from "../utils";
-import RegisterPage from "./RegisterPage";
 
 class LoginPage extends React.Component {
   state = {
@@ -92,7 +91,7 @@ class LoginForm extends React.Component {
 
     try {
       const resp = await login(formData);
-      this.props.handleLoginSuccess(resp.token);
+      this.props.handleLoginSuccess(resp.token, values.username);
       message.success("Login Successfully");
     } catch (error) {
       message.error("Username or Password Incorrect");
