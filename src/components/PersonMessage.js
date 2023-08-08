@@ -82,8 +82,10 @@ class PersonMessage extends Component {
       const currURL = window.location.href;
       const chat_id = currURL.split("/")[4];
       const resp = await getAllMessages(chat_id);
+      const respList = await getAllChats();
       this.setState({
         myMessage: resp,
+        chat_list: respList,
       });
     } catch (error) {
       message.error(error.message);
@@ -94,24 +96,24 @@ class PersonMessage extends Component {
     }
   };
 
-  loadChatListData = async () => {
-    this.setState({
-      loading: true,
-    });
+  // loadChatListData = async () => {
+  //   this.setState({
+  //     loading: true,
+  //   });
 
-    try {
-      const resp = await getAllChats();
-      this.setState({
-        chat_list: resp,
-      });
-    } catch (error) {
-      message.error(error.message);
-    } finally {
-      this.setState({
-        loading: false,
-      });
-    }
-  };
+  //   try {
+  //     const resp = await getAllChats();
+  //     this.setState({
+  //       chat_list: resp,
+  //     });
+  //   } catch (error) {
+  //     message.error(error.message);
+  //   } finally {
+  //     this.setState({
+  //       loading: false,
+  //     });
+  //   }
+  // };
 
   // componenWillUpdate() {
   //   console.log("Component,will update");
@@ -488,7 +490,7 @@ class PersonMessage extends Component {
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   render() {
     this.loadData();
-    this.loadChatListData();
+    // this.loadChatListData();
     const { value } = this.state;
     console.log("Value", value);
     return (
