@@ -21,6 +21,7 @@ import {
   CommentOutlined,
   HeartOutlined,
   MailOutlined,
+  LineChartOutlined,
 } from "@ant-design/icons";
 
 import { HeartFilled } from "@ant-design/icons";
@@ -38,17 +39,17 @@ import {
 } from "../utils";
 import { Form, Input } from "antd";
 
-const location = {
-  address: "1600 Amphitheatre Parkway, Mountain View, california.",
-  lat: 37.42216,
-  lng: -122.08427,
-};
-
 const layout = {
   // 表单左边是label，右边是wrapper
   labelCol: { span: 5 },
   wrapperCol: { span: 16 },
 };
+
+// const location = {
+//   address: "1600 Amphitheatre Parkway, Mountain View, california.",
+//   lat: 37.42216,
+//   lng: -122.08427,
+// };
 
 function getRandomIndexesFromArray(arr, count) {
   if (
@@ -345,7 +346,16 @@ class DetailPage extends React.Component {
       item_image_urls,
       user_name,
       item_posted_day,
+      lat,
+      lon,
     } = dataSour;
+
+    const location = {
+      // this address is fake, actually we use lat and lon to show the location
+      address: "1600 Amphitheatre Parkway, Mountain View, california.",
+      lat: lat,
+      lng: lon,
+    };
 
     const colorSelected = getRandomIndexesFromArray(items, 2);
     const { favorite, isAsked, currentUserName } = this.state;
