@@ -18,27 +18,6 @@ import { getAllChats, getAllMessages } from "../utils";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 const { Header, Footer } = Layout;
-const messageList = [
-  {
-    id: 1,
-    Content:
-      "Hi, Im Sijun, how are you doing, i expected to see u soon in january",
-    sender_name: "sijun",
-    receiver_name: "changhao",
-    send_time: "2023-08-03",
-    chat_id: 1,
-  },
-  {
-    id: 2,
-    Content: "Hi, Im Changhao",
-    sender_name: "changhao",
-    receiver_name: "sijun",
-    send_time: "2023-08-03",
-    chat_id: 2,
-  },
-];
-const userId = "sijun";
-
 class ChatBox extends React.Component {
   state = {
     key: "tab1",
