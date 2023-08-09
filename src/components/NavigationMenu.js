@@ -31,12 +31,12 @@ const NavigationMenu = ({ renderPage }) => {
   };
 
   return (
-    <Sider width={300} style={{ padding: 10, backgroundColor: "#112a45" }}>
+    <Sider width={300} style={{ padding: 10, backgroundColor: "#003153" }}>
       <div
         className="title"
         style={{
           height: "8vh",
-          backgroundColor: "#112a45",
+          backgroundColor: "#003153",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",

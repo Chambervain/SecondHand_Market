@@ -113,7 +113,7 @@ function App() {
           style={{
             display: "flex",
             justifyContent: "space-between",
-            backgroundColor: "#096dd9",
+            backgroundColor: "#800000",
             height: "8vh",
           }}
         >
@@ -142,7 +142,7 @@ function App() {
           style={{
             display: "flex",
             justifyContent: "space-between",
-            backgroundColor: "#096dd9",
+            backgroundColor: "#800000",
           }}
         >
           <div
@@ -239,7 +239,7 @@ function App() {
             height: "calc(100% - 64px)",
             padding: 20,
             overflow: "auto",
-            backgroundColor: "#E3F2FD",
+            backgroundColor: "#dde4e8",
           }}
         >
           {renderContent()}

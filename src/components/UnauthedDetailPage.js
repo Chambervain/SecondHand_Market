@@ -109,7 +109,7 @@ class UnauthedDetailPage extends React.Component {
         style={{
           display: "flex",
           justifyContent: "space-between",
-          backgroundColor: "#096dd9",
+          backgroundColor: "#800000",
         }}
       >
         <Link to={`/`}>

@@ -57,7 +57,7 @@ const FavCart = ({ username }) => {
           dataSource={data}
           renderItem={(item) => (
             <List.Item>
-              <Tooltip title="Click to see details" color="geekblue">
+              <Tooltip title="Click to see details" color="purple">
                 <List.Item.Meta
                   avatar={
                     <Link to={`/items/${item.item_id}/${username}`}>
