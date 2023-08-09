@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import "./App.css";
-import { Button, Dropdown, Layout, Menu, message } from "antd";
+import { Button, Dropdown, Layout, Menu, message, Image } from "antd";
 import React from "react";
 import { UserOutlined, UploadOutlined } from "@ant-design/icons";
 import LoginPage from "./components/LoginPage";

@@ -1,7 +1,7 @@
 import {
   ContainerOutlined,
+  CrownOutlined,
   DesktopOutlined,
-  PieChartOutlined,
 } from "@ant-design/icons";
 import { Menu, Layout } from "antd";
 import React from "react";
@@ -17,7 +17,7 @@ function getItem(label, key, icon, children, type) {
   };
 }
 const items = [
-  getItem("Home page", "1", <PieChartOutlined />),
+  getItem("Home page", "1", <CrownOutlined />),
   getItem("My items", "2", <DesktopOutlined />),
   getItem("Upload item", "3", <ContainerOutlined />),
 ];

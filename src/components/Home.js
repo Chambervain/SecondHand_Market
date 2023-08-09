@@ -24,13 +24,20 @@ import {
   SkinOutlined,
   LaptopOutlined,
   SketchOutlined,
-  HomeOutlined,
+  BankOutlined,
+  ShoppingOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
 const { Search } = Input;
 
 const items = [
+  {
+    label: "All Products",
+    key: "All",
+    icon: <ShoppingOutlined />,
+  },
+
   {
     label: "Clothing",
     key: "Clothing",
@@ -49,7 +56,7 @@ const items = [
   {
     label: "Household goods",
     key: "Household goods",
-    icon: <HomeOutlined />,
+    icon: <BankOutlined />,
   },
 ];
 
@@ -112,6 +119,20 @@ const Home = (props) => {
 
     setLoading(true);
     console.log(e.key);
+
+    // Return back for presenting all the items again
+    if (e.key === "All") {
+      try {
+        const data = await getAllItems(lat, lon);
+        setData(data);
+      } catch (error) {
+        message.error(error.message);
+      } finally {
+        setLoading(false);
+      }
+
+      return;
+    }
 
     try {
       const data = await getItemsByCategory(e.key, lat, lon);
