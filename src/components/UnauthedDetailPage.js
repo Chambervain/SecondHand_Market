@@ -19,11 +19,11 @@ import { getItemById } from "../utils";
 import { TagOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
-const location = {
-  address: "1600 Amphitheatre Parkway, Mountain View, california.",
-  lat: 37.42216,
-  lng: -122.08427,
-};
+// const location = {
+//   address: "1600 Amphitheatre Parkway, Mountain View, california.",
+//   lat: 37.42216,
+//   lng: -122.08427,
+// };
 
 const layout = {
   // 表单左边是label，右边是wrapper
@@ -151,9 +151,18 @@ class UnauthedDetailPage extends React.Component {
       item_image_urls,
       user_name,
       item_posted_day,
+      lat,
+      lon,
     } = dataSour;
 
     const colorSelected = getRandomIndexesFromArray(items, 2);
+
+    const location = {
+      // this address is fake, actually we use lat and lon to show the location
+      address: "1600 Amphitheatre Parkway, Mountain View, california.",
+      lat: lat,
+      lng: lon,
+    };
 
     let newArray = item_image_urls ? item_image_urls : [];
     return (
