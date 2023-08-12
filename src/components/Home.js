@@ -30,6 +30,7 @@ import {
 import { Link } from "react-router-dom";
 
 const { Search } = Input;
+const { Meta } = Card;
 
 const items = [
   {
@@ -153,14 +154,31 @@ const Home = (props) => {
     <>
       <div
         style={{
-          // display: "flex",
+          //display: "flex",
+
           alignItems: "center",
           textAlign: "center",
+
           // justifyContent: "space-between",
         }}
       >
+        <div>
+          <h1
+            style={{
+              marginLeft: "50px",
+              position: "relative",
+              fontSize: 38,
+              fontFamily: "Times New Roman,serif",
+            }}
+          >
+            Winter Season begins
+          </h1>
+        </div>
         <br />
-        <Dropdown menu={menuProps}>
+        <Dropdown
+          menu={menuProps}
+          style={{ position: "relative", width: "20%" }}
+        >
           <Button shape="circle-outline">
             <Space>
               Choose your product category
@@ -170,7 +188,7 @@ const Home = (props) => {
         </Dropdown>
 
         <Search
-          style={{ position: "relative", width: "37%" }}
+          style={{ position: "relative", width: "30%" }}
           loading={loading}
           placeholder="Input your search keyword"
           onSearch={onSearch}
@@ -180,10 +198,10 @@ const Home = (props) => {
       <br />
 
       <List
-        style={{ marginTop: 20 }}
+        style={{ marginTop: 20, maxWidth: 1000 }}
         loading={loading}
         grid={{
-          gutter: 16,
+          gutter: 400,
           xs: 1,
           sm: 2,
           md: 3,
@@ -204,24 +222,8 @@ const Home = (props) => {
               <Card
                 hoverable
                 key={item.item_id}
-                title={
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Text ellipsis={true} style={{ maxWidth: 150 }}>
-                      {item.item_name}
-                    </Text>
-                    <Text ellipsis={true} style={{ maxWidth: 150 }}>
-                      ${item.item_price}
-                    </Text>
-                  </div>
-                }
-              >
-                {
+                style={{ width: 330, border: "none" }}
+                cover={
                   <Carousel
                     autoplay
                     dots={true}
@@ -234,13 +236,46 @@ const Home = (props) => {
                         <Image
                           src={url}
                           width="100%"
-                          height="250px"
+                          height="400px"
                           style={{ objectFit: "cover" }}
                         />
                       </div>
                     ))}
                   </Carousel>
                 }
+              >
+                <Meta
+                  title={
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Text
+                        ellipsis={true}
+                        style={{
+                          maxWidth: 150,
+                          fontSize: 15,
+                          fontFamily: "Georgia,serif",
+                        }}
+                      >
+                        {item.item_name}
+                      </Text>
+                      <Text
+                        ellipsis={true}
+                        style={{
+                          maxWidth: 150,
+                          fontSize: 15,
+                          fontFamily: "Georgia,serif",
+                        }}
+                      >
+                        ${item.item_price}
+                      </Text>
+                    </div>
+                  }
+                ></Meta>
               </Card>
             </Link>
           </List.Item>

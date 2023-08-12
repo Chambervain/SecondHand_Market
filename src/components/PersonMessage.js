@@ -432,38 +432,26 @@ class PersonMessage extends Component {
   };
   renderHeaderContent = () => {
     return (
-      <Header
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          backgroundColor: "#096dd9",
-          height: "8vh",
-          backgroundImage:
-            "url('https://www.freepik.com/free-vector/flat-design-geometric-real-estate-twitter-header_20814906.htm#query=website%20header&position=17&from_view=keyword&track=ais')",
-        }}
-      >
-        <Link to={`/`}>
-          <div
+      <Header className="header_new">
+        <div>
+          <p
             style={{
-              width: 1100,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: 60,
+              marginLeft: 15,
+              fontSize: 19,
+              fontWeight: "bold",
+              fontFamily: "Georgia, serif",
             }}
           >
-            <Button
-              type="text"
-              style={{
-                color: "white",
-              }}
-              icon={<HomeOutlined style={{ fontSize: 25 }} />}
-            />
-          </div>
+            Contacts
+          </p>
+        </div>
+        <Link to={`/`}>
+          <div className="header_title">LETGO</div>
         </Link>
         <Link to={`/chatbox/${userId}`}>
           <div
             style={{
+              marginLeft: 1100,
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
@@ -473,9 +461,9 @@ class PersonMessage extends Component {
             <Button
               type="text"
               style={{
-                color: "white",
+                color: "black",
               }}
-              icon={<MailOutlined style={{ fontSize: 25 }} />}
+              icon={<MailOutlined style={{ fontSize: 20 }} />}
             />
           </div>
         </Link>
@@ -497,7 +485,11 @@ class PersonMessage extends Component {
       <Layout>
         {this.renderHeaderContent()}
         <Content>
-          <ProCard style={{ height: "90vh" }} split="vertical" bordered>
+          <ProCard
+            style={{ marginTop: 40, height: "90vh" }}
+            split="vertical"
+            bordered
+          >
             <ProCard colSpan="20%">{this.renderInsideBar()}</ProCard>
             <ProCard style={{ backgroundColor: "#f0f0f0" }}>
               {this.renderChatContent(value)}

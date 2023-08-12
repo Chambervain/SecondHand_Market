@@ -200,48 +200,25 @@ class DetailPage extends React.Component {
   ////////////////////////////////////////////////////RENDER HEAD CONTENT//////////////////////////////////////////////////////
   renderHeaderContent = (user_name) => {
     return (
-      <Header
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          backgroundColor: "#800000",
-        }}
-      >
+      <Header className="header_new">
         <Link to={`/`}>
-          <div
-            style={{
-              width: 1100,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: 60,
-            }}
-          >
-            <Button
-              type="text"
-              style={{
-                color: "white",
-              }}
-              icon={<HomeOutlined style={{ fontSize: 25 }} />}
-            />
-          </div>
+          <div className="header_title">LETGO</div>
         </Link>
 
         <Link to={`/chatbox/${user_name}`}>
           <div
             style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
               height: 60,
             }}
           >
             <Button
               type="text"
               style={{
-                color: "white",
+                marginTop: "15px",
+                marginLeft: "1200px",
+                color: "black",
               }}
-              icon={<MailOutlined style={{ fontSize: 25 }} />}
+              icon={<MailOutlined style={{ fontSize: 20 }} />}
             />
           </div>
         </Link>
@@ -364,7 +341,7 @@ class DetailPage extends React.Component {
     return (
       <Layout>
         {this.renderHeaderContent(host_name)}
-        <Content>
+        <Content style={{ marginTop: "50px" }}>
           <ProCard split="vertical">
             <ProCard headerBordered colSpan="70%">
               <Breadcrumb separator=">">
@@ -380,7 +357,7 @@ class DetailPage extends React.Component {
               <div style={{ width: 900 }}>
                 <div
                   style={{
-                    border: "1px solid",
+                    border: "none",
                     borderColor: "rgb(211, 211, 211)",
                   }}
                 >
@@ -430,7 +407,7 @@ class DetailPage extends React.Component {
             </ProCard>
             <ProCard>
               <div style={{ height: 22 }}></div>
-              <Divider />
+
               <Space direction="vertical">
                 <div>
                   <h2 style={{ fontSize: 35, fontWeight: "bold" }}>
@@ -441,11 +418,11 @@ class DetailPage extends React.Component {
                       ${item_price}
                     </p>
                   </div>
-                  <p style={{ fontSize: 20 }}>
+                  <p style={{ fontSize: 15 }}>
                     Lasted Posted on {item_posted_day}
                   </p>
-                  <p style={{ fontSize: 20 }}>Condition: {item_condition}</p>
-                  <p style={{ fontSize: 20 }}>Category: {item_category}</p>
+                  <p style={{ fontSize: 15 }}>Condition: {item_condition}</p>
+                  <p style={{ fontSize: 15 }}>Category: {item_category}</p>
                 </div>
                 <div>
                   <div
@@ -613,7 +590,6 @@ class DetailPage extends React.Component {
               size="large"
               style={{ fontSize: 30 }}
             >
-              <Divider />
               <div style={{ fontSize: 25, fontWeight: "bolder" }}>
                 Descriptions
               </div>
@@ -649,7 +625,6 @@ class DetailPage extends React.Component {
               </Tag>
             </ProCard>
             <ProCard headerBordered>
-              <Divider />
               <div>
                 <div style={{ fontSize: 25, fontWeight: 20, height: 60 }}>
                   Seller
@@ -666,7 +641,6 @@ class DetailPage extends React.Component {
                   </div>
                 </div>
               </div>
-              <Divider />
               <Space direction="vertical"></Space>
             </ProCard>
           </ProCard>

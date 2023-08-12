@@ -6,6 +6,7 @@ import {
 import { Menu, Layout } from "antd";
 import React from "react";
 import MusicPlayer from "./MusicPlayer";
+import myImage from "../images/log3.png";
 
 function getItem(label, key, icon, children, type) {
   return {
@@ -24,47 +25,62 @@ const items = [
 
 const { Sider } = Layout;
 
-const NavigationMenu = ({ renderPage }) => {
+const NavigationMenu = ({ renderPage, collapsed }) => {
   const onClick = (e) => {
     console.log("MenuItem Key", e.key);
     renderPage(e.key);
   };
 
   return (
-    <Sider width={300} style={{ padding: 10, backgroundColor: "#003153" }}>
+    <Sider
+      width={collapsed ? 0 : 400}
+      collapsed={collapsed}
+      collapsedWidth={collapsed ? 0 : 80}
+      style={{
+        padding: 10,
+        position: "relative",
+        overflow: "hidden",
+        background: collapsed ? "white" : "ghostwhite",
+        backgroundSize: "cover",
+      }}
+    >
       <div
         className="title"
         style={{
           height: "8vh",
-          backgroundColor: "#003153",
+          background: "ghostwhite",
           display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          alignItems: "left",
+          justifyContent: "left",
         }}
       >
         <MusicPlayer />
         <span
           style={{
-            marginLeft: 15,
-            fontSize: 16,
-            fontWeight: 800,
-            color: "white",
+            marginLeft: 10,
+            fontSize: 18,
+            fontWeight: 600,
+            color: "dark",
             height: "calc(100% - 64px)",
             display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            alignItems: "left",
+            justifyContent: "left",
           }}
         >
-          Letgo: second-hand market
+          secondhand market
         </span>
       </div>
       <Menu
         onClick={onClick}
-        theme="dark"
+        theme="light"
         defaultSelectedKeys={["1"]}
         mode="inline"
         items={items}
-        style={{ marginBottom: 26, backgroundColor: "#1765ad" }}
+        style={{
+          marginBottom: 26,
+          overflow: "hidden",
+          background: "ghostwhite",
+        }}
       />
     </Sider>
   );

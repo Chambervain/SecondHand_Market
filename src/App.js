@@ -8,7 +8,7 @@ import RegisterPage from "./components/RegisterPage";
 import Logout from "./components/Logout";
 import Home from "./components/Home";
 import NavigationMenu from "./components/NavigationMenu";
-import { HomeOutlined } from "@ant-design/icons";
+import { HomeOutlined, MailOutlined } from "@ant-design/icons";
 import MyOwnItems from "./components/MyOwnItem";
 import UploadItems from "./components/UploadItems";
 import FavCart from "./components/FavCart";
@@ -16,6 +16,9 @@ import axios from "axios";
 import { getCurrentUserName } from "./utils";
 import ChatBox from "./components/ChatBox";
 import PersonMessage from "./components/PersonMessage";
+import { Link } from "react-router-dom";
+import myImage from "./images/log3.png";
+import logoImage from "./images/log4.png";
 
 const { Header, Content } = Layout;
 
@@ -25,6 +28,35 @@ function App() {
   const [username, setUsername] = useState("");
   const [curLocation, setCurLocation] = useState({});
   const [isLocationReady, setIsLocationReady] = useState(false);
+  const [headerBg, setHeaderBg] = useState(false);
+
+  //collapsed
+  const [collapsed, setCollapsed] = useState(false);
+
+  const toggleCollapsed = () => {
+    setCollapsed(!collapsed);
+  };
+
+  //handScroll
+
+  const handleScroll = () => {
+    if (window.pageYOffset >= 300) {
+      setHeaderBg(true);
+    } else {
+      setHeaderBg(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const headerClassName = headerBg ? "header_new" : "header";
+  //////
 
   useEffect(() => {
     getLocation();
@@ -109,27 +141,28 @@ function App() {
   const renderHeaderContent = () => {
     if (!authed) {
       return (
-        <Header
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            backgroundColor: "#800000",
-            height: "8vh",
-          }}
-        >
-          <HomeOutlined
+        <Header className={headerClassName}>
+          {/* <div
             style={{
-              width: 960,
-              fontWeight: 600,
-              color: "white",
-              fontSize: 25,
+              left: 0,
+              position: "absolute",
+              marginLeft: "5px",
+              marginTop: "15px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
             }}
-          />
-
+          >
+            <img src={logoImage} width={30} height={30}></img>
+          </div> */}
           <div>
+            <Button type="text" onClick={toggleCollapsed}>
+              <p style={{ fontFamily: "Roboto,san-serif" }}>Show Menu</p>
+            </Button>
+          </div>
+          <div className="header_title">LETGO</div>
+
+          <div style={{ marginLeft: 1200, fontSize: 5 }}>
             <Dropdown trigger="click" overlay={userMenuLogin}>
               <Button icon={<UserOutlined />} shape="circle" />
             </Dropdown>
@@ -138,29 +171,49 @@ function App() {
       );
     } else {
       return (
-        <Header
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            backgroundColor: "#800000",
-          }}
-        >
-          <div
-            style={{
-              width: 960,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+        <Header className={headerClassName}>
+          <div>
+            <Button type="text" onClick={toggleCollapsed}>
+              <p style={{ fontFamily: "Roboto,san-serif" }}>Show Menu</p>
+            </Button>
+          </div>
+          <div className="header_title">
             <Button
               type="text"
               style={{
-                color: "white",
+                fontSize: 40,
+                fontFamily: "Copperplate, fantasy",
+                fontWeight: "bolder",
+                marginTop: 15,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
-              icon={<HomeOutlined style={{ fontSize: 25 }} />}
               onClick={() => changeContent(1)}
-            />
+            >
+              LETGO
+            </Button>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: "5px",
+              marginRight: "5px",
+            }}
+          >
+            <Link to={`/chatbox/${username}`}>
+              <div style={{ marginLeft: 1000 }}>
+                <Button
+                  type="text"
+                  style={{
+                    color: "black",
+                  }}
+                  icon={<MailOutlined style={{ fontSize: 20 }} />}
+                />
+              </div>
+            </Link>
           </div>
           <div
             style={{
@@ -181,7 +234,7 @@ function App() {
             <Button
               type="text"
               style={{
-                color: "white",
+                color: "black",
               }}
               icon={<UploadOutlined style={{ fontSize: 23 }} />}
               onClick={() => changeContent(3)}
@@ -231,19 +284,24 @@ function App() {
 
   return (
     <Layout>
-      <NavigationMenu renderPage={changeContent} />
-      <Layout className="site-layout" style={{ height: "100vh" }}>
-        {renderHeaderContent()}
-        <Content
-          style={{
-            height: "calc(100% - 64px)",
-            padding: 20,
-            overflow: "auto",
-            backgroundColor: "#dde4e8",
-          }}
-        >
-          {renderContent()}
-        </Content>
+      {renderHeaderContent()}
+      <div>
+        <img src={myImage} width="100%" />
+      </div>
+      <Layout>
+        <NavigationMenu renderPage={changeContent} collapsed={collapsed} />
+        <Layout>
+          <Content
+            style={{
+              height: "1000px",
+              padding: 20,
+              overflow: "auto",
+              backgroundColor: "white",
+            }}
+          >
+            {renderContent()}
+          </Content>
+        </Layout>
       </Layout>
     </Layout>
   );

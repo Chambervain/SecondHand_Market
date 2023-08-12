@@ -45,31 +45,9 @@ class ChatBox extends React.Component {
 
   renderHeaderContent = (user_name) => {
     return (
-      <Header
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          backgroundColor: "#096dd9",
-        }}
-      >
+      <Header className="header_new">
         <Link to={`/`}>
-          <div
-            style={{
-              width: 1100,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: 60,
-            }}
-          >
-            <Button
-              type="text"
-              style={{
-                color: "white",
-              }}
-              icon={<HomeOutlined style={{ fontSize: 25 }} />}
-            />
-          </div>
+          <div className="header_title">LETGO</div>
         </Link>
 
         <div>
@@ -145,7 +123,7 @@ class ChatBox extends React.Component {
                 </div>
               </div>
               <div className="footer">
-                <Footer style={{ textAlign: "center" }}>
+                <Footer style={{ textAlign: "center", marginTop: 80 }}>
                   Letgo Design ©2023 Created by Letgo CodeStranger
                 </Footer>
               </div>

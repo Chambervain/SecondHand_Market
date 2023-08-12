@@ -13,15 +13,45 @@
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.header {
+  width: 100%;
+  position: fixed;
+  overflow: hidden;
+  box-sizing: border-box;
+  z-index: 1000;
+  /*background: url("./images/log2.jpg");*/
+  background-color: white;
+  background-size: cover;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  height: 8vh;
+}
+
+.header_new {
+  width: 100%;
+  position: fixed;
+  overflow: hidden;
+  box-sizing: border-box;
+  z-index: 1000;
+  background: white;
+  background-size: cover;
+  display: flex;
+  justify-content: space-between;
+  height: 8vh;
+}
+
+.header_title {
+  font-family: "Copperplate", fantasy;
+  font-size: 40px;
+  font-weight: bolder;
+  color: Black;
+  margin-left: 690px;
+  left: 0;
+  position: absolute;
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  font-weight: 600;
 }
 
 .App-link {
