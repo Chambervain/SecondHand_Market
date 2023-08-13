@@ -486,12 +486,12 @@ class PersonMessage extends Component {
         {this.renderHeaderContent()}
         <Content>
           <ProCard
-            style={{ marginTop: 40, height: "90vh" }}
+            style={{ marginTop: 50, height: "90vh" }}
             split="vertical"
             bordered
           >
             <ProCard colSpan="20%">{this.renderInsideBar()}</ProCard>
-            <ProCard style={{ backgroundColor: "#f0f0f0" }}>
+            <ProCard style={{ backgroundColor: "#f0f0f0", height: "99vh" }}>
               {this.renderChatContent(value)}
             </ProCard>
           </ProCard>

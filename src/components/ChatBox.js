@@ -64,7 +64,7 @@ class ChatBox extends React.Component {
         {this.renderHeaderContent()}
         <Content>
           <ProCard>
-            <div className="cumbercamb">
+            <div className="cumbercamb" style={{ marginTop: 100 }}>
               <Breadcrumb separator=">">
                 <Breadcrumb.Item>Home</Breadcrumb.Item>
                 <Breadcrumb.Item>Item</Breadcrumb.Item>
@@ -123,7 +123,7 @@ class ChatBox extends React.Component {
                 </div>
               </div>
               <div className="footer">
-                <Footer style={{ textAlign: "center", marginTop: 80 }}>
+                <Footer style={{ textAlign: "center", marginTop: 128 }}>
                   Letgo Design ©2023 Created by Letgo CodeStranger
                 </Footer>
               </div>

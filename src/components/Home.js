@@ -198,13 +198,16 @@ const Home = (props) => {
       <br />
 
       <List
-        style={{ marginTop: 20, maxWidth: 1000 }}
+        style={{
+          marginTop: 20,
+          maxWidth: 1000,
+        }}
         loading={loading}
         grid={{
           gutter: 400,
           xs: 1,
           sm: 2,
-          md: 3,
+          md: 2,
           lg: 3,
           xl: 4,
           xxl: 4,
