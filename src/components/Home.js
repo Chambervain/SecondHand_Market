@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   getAllItems,
   getItemsByCategory,
@@ -15,6 +15,9 @@ import {
   Space,
   Button,
   Dropdown,
+  Row,
+  Modal,
+  Slider,
 } from "antd";
 import Text from "antd/lib/typography/Text";
 import {
@@ -26,8 +29,10 @@ import {
   SketchOutlined,
   BankOutlined,
   ShoppingOutlined,
+  EnvironmentOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
+import SearchLocation from "./SearchLocation";
 
 const { Search } = Input;
 const { Meta } = Card;
@@ -66,12 +71,18 @@ const Home = (props) => {
   const [data, setData] = useState([]);
   const [keyword, setKeyword] = useState("");
   const [username, setUsername] = useState("");
-  const { authed, lat, lon } = props;
+  const { authed, lat, lon, city, region } = props;
+  const [radius, setRadius] = useState(30);
+  const [sliderValue, setSliderValue] = useState(30);
+  const [localCity, setLocalCity] = useState("");
+  const [localState, setLocalState] = useState("");
+  const [localLat, setLocalLat] = useState();
+  const [localLon, setLocalLon] = useState();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const formatter = (value) => `${value}`;
 
-  //The home component would render after gaining lat or lon
   useEffect(() => {
-    setLoading(true);
-    getAllItems(lat, lon)
+    getAllItems(lat, lon, radius)
       .then((data) => {
         setData(data);
       })
@@ -82,7 +93,7 @@ const Home = (props) => {
       .finally(() => {
         setLoading(false);
       });
-  }, [lat, lon]);
+  }, [lat, lon, radius]);
 
   // get current username by calling backend api
   useEffect(() => {
@@ -105,7 +116,7 @@ const Home = (props) => {
     setLoading(true);
 
     try {
-      const data = await searchItemsByKeyword(keyword, lat, lon);
+      const data = await searchItemsByKeyword(keyword, lat, lon, radius);
       setData(data);
     } catch (error) {
       message.error(error.message);
@@ -124,7 +135,7 @@ const Home = (props) => {
     // Return back for presenting all the items again
     if (e.key === "All") {
       try {
-        const data = await getAllItems(lat, lon);
+        const data = await getAllItems(lat, lon, radius);
         setData(data);
       } catch (error) {
         message.error(error.message);
@@ -136,7 +147,7 @@ const Home = (props) => {
     }
 
     try {
-      const data = await getItemsByCategory(e.key, lat, lon);
+      const data = await getItemsByCategory(e.key, lat, lon, radius);
       setData(data);
     } catch (error) {
       message.error(error.message);
@@ -148,6 +159,34 @@ const Home = (props) => {
   const menuProps = {
     items,
     onClick: handleMenuClick,
+  };
+
+  const handleRadiusAndLocationApply = () => {
+    setRadius(sliderValue);
+    props.changeLocation(localCity, localState, localLat, localLon);
+    getAllItems(localLat, localLon, radius)
+      .then((data) => {
+        setData(data);
+      })
+      .catch((err) => {
+        // avoid annoying error message
+        // message.error(err.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+    setIsModalVisible(false);
+  };
+
+  const handleCityChange = (city, state, lat, lon) => {
+    setLocalCity(city);
+    setLocalState(state);
+    setLocalLat(lat);
+    setLocalLon(lon);
+  };
+
+  const handleSliderChange = (value) => {
+    setSliderValue(value);
   };
 
   return (
@@ -167,7 +206,7 @@ const Home = (props) => {
             style={{
               marginLeft: "50px",
               position: "relative",
-              fontSize: 38,
+              fontSize: 30,
               fontFamily: "Times New Roman,serif",
             }}
           >
@@ -175,26 +214,103 @@ const Home = (props) => {
           </h1>
         </div>
         <br />
-        <Dropdown
-          menu={menuProps}
-          style={{ position: "relative", width: "20%" }}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
         >
-          <Button shape="circle-outline">
-            <Space>
-              Choose your product category
-              <DownOutlined />
-            </Space>
-          </Button>
-        </Dropdown>
+          <Dropdown
+            menu={menuProps}
+            style={{ marginRight: "20px", width: "20%" }}
+          >
+            <Button shape="circle-outline">
+              <Space>
+                Choose your product category
+                <DownOutlined />
+              </Space>
+            </Button>
+          </Dropdown>
+          <div style={{ width: "10px" }}></div>
+          <Search
+            style={{ marginRight: "20px", width: "30%" }}
+            loading={loading}
+            placeholder="Input your search keyword"
+            onSearch={onSearch}
+            enterButton
+          />
 
-        <Search
-          style={{ position: "relative", width: "30%" }}
-          loading={loading}
-          placeholder="Input your search keyword"
-          onSearch={onSearch}
-          enterButton
-        />
+          <span
+            class="city"
+            onClick={() => setIsModalVisible(true)}
+            style={{
+              cursor: "pointer",
+              color: "green",
+              fontWeight: "normal",
+              fontSize: 18,
+              display: "flex",
+              alignItems: "center",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = "#f2f2f2";
+              e.currentTarget.style.boxShadow =
+                "0px 4px 8px rgba(0, 0, 0, 0.2)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "transparent";
+              e.currentTarget.style.boxShadow = "0px 2px 4px rgba(0, 0, 0, 0)";
+            }}
+          >
+            <EnvironmentOutlined
+              twoToneColor="#52c41a"
+              style={{
+                fontSize: "18px",
+                marginRight: "8px",
+              }}
+            />
+            <p
+              style={{
+                margin: 0,
+                borderRadius: "2px",
+              }}
+            >{`${city} : within ${radius} miles`}</p>
+          </span>
+          <Modal
+            title="Location"
+            open={isModalVisible}
+            onCancel={() => setIsModalVisible(false)}
+            footer={[
+              <Button key="cancel" onClick={() => setIsModalVisible(false)}>
+                Cancel
+              </Button>,
+              <Button
+                key="apply"
+                type="primary"
+                onClick={handleRadiusAndLocationApply}
+              >
+                Apply
+              </Button>,
+            ]}
+          >
+            <SearchLocation
+              city={city}
+              region={region}
+              onCityChange={handleCityChange}
+            />
+            <br />
+            <p>Distance (miles):</p>
+            <Slider
+              defaultValue={radius}
+              tooltip={{
+                formatter,
+              }}
+              onChange={handleSliderChange}
+            />
+          </Modal>
+        </div>
       </div>
+
       <br />
 
       <List

@@ -12,6 +12,7 @@ import { HomeOutlined, MailOutlined } from "@ant-design/icons";
 import MyOwnItems from "./components/MyOwnItem";
 import UploadItems from "./components/UploadItems";
 import FavCart from "./components/FavCart";
+import MyAccount from "./components/MyAccount";
 import axios from "axios";
 import { getCurrentUserName } from "./utils";
 import ChatBox from "./components/ChatBox";
@@ -27,6 +28,10 @@ function App() {
   const [key, setKey] = useState(1);
   const [username, setUsername] = useState("");
   const [curLocation, setCurLocation] = useState({});
+  const [lat, setLat] = useState();
+  const [lon, setLon] = useState();
+  const [city, setCity] = useState("");
+  const [region, setRegion] = useState("");
   const [isLocationReady, setIsLocationReady] = useState(false);
   const [headerBg, setHeaderBg] = useState(false);
 
@@ -78,6 +83,10 @@ function App() {
   const getLocation = async () => {
     const location = await axios.get("https://ipapi.co/json");
     setCurLocation(location.data);
+    setLat(location.data.latitude);
+    setLon(location.data.longitude);
+    setCity(location.data.city);
+    setRegion(location.data.region);
     console.log(location.data);
     setIsLocationReady(true);
   };
@@ -120,10 +129,26 @@ function App() {
   };
 
   const userMenuLogout = () => {
+    const menuStyle = {
+      borderRadius: "10px",
+      background: "#f2f2f2",
+      border: "none",
+    };
+
+    const menuItemStyle = {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      height: "50px",
+      background: "#f2f2f2",
+    };
     return (
-      <Menu>
-        <Menu.Item>
+      <Menu style={menuStyle}>
+        <Menu.Item style={menuItemStyle}>
           <Logout handleLogout={handleLogOut} />
+        </Menu.Item>
+        <Menu.Item style={menuItemStyle}>
+          <MyAccount />
         </Menu.Item>
       </Menu>
     );
@@ -250,6 +275,17 @@ function App() {
     }
   };
 
+  const handleChangeLocation = (city, region, lat, lon) => {
+    console.log(city);
+    console.log(lat);
+    if (city != null) {
+      setCity(city);
+      setRegion(region);
+      setLat(lat);
+      setLon(lon);
+    }
+  };
+
   const renderContent = () => {
     if (authed && key == 1) {
       return (
@@ -257,8 +293,11 @@ function App() {
           {isLocationReady && (
             <Home
               authed={authed}
-              lat={curLocation.latitude}
-              lon={curLocation.longitude}
+              lat={lat}
+              lon={lon}
+              city={city}
+              region={region}
+              changeLocation={handleChangeLocation}
             />
           )}
         </div>
@@ -273,11 +312,18 @@ function App() {
       );
     } else {
       return (
-        <Home
-          authed={authed}
-          lat={curLocation.latitude}
-          lon={curLocation.longitude}
-        />
+        <div>
+          {isLocationReady && (
+            <Home
+              authed={authed}
+              lat={lat}
+              lon={lon}
+              city={city}
+              region={region}
+              changeLocation={handleChangeLocation}
+            />
+          )}
+        </div>
       );
     }
   };

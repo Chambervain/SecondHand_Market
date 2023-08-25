@@ -5,7 +5,7 @@ import {
 } from "@ant-design/icons";
 import { Menu, Layout } from "antd";
 import React from "react";
-import MusicPlayer from "./MusicPlayer";
+import letgo from "../images/letgo.svg";
 import myImage from "../images/log3.png";
 
 function getItem(label, key, icon, children, type) {
@@ -54,11 +54,11 @@ const NavigationMenu = ({ renderPage, collapsed }) => {
           justifyContent: "left",
         }}
       >
-        <MusicPlayer />
+        {/* <MusicPlayer /> */}
         <span
           style={{
             marginLeft: 10,
-            fontSize: 18,
+            fontSize: 20,
             fontWeight: 600,
             color: "dark",
             height: "calc(100% - 64px)",
@@ -67,6 +67,15 @@ const NavigationMenu = ({ renderPage, collapsed }) => {
             justifyContent: "left",
           }}
         >
+          <img
+            src={letgo}
+            alt="LetGo"
+            style={{
+              marginRight: 10,
+              height: 30,
+              width: 30,
+            }}
+          />
           secondhand market
         </span>
       </div>
