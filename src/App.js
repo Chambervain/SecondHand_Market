@@ -1,18 +1,25 @@
 import { useState, useEffect } from "react";
 import "./App.css";
-import { Button, Dropdown, Layout, Menu, message, Image } from "antd";
+import {
+  Button,
+  Dropdown,
+  Layout,
+  Menu,
+  message,
+  Image,
+  Modal,
+  List,
+} from "antd";
 import React from "react";
 import { UserOutlined, UploadOutlined } from "@ant-design/icons";
 import LoginPage from "./components/LoginPage";
 import RegisterPage from "./components/RegisterPage";
-import Logout from "./components/Logout";
 import Home from "./components/Home";
 import NavigationMenu from "./components/NavigationMenu";
 import { HomeOutlined, MailOutlined } from "@ant-design/icons";
 import MyOwnItems from "./components/MyOwnItem";
 import UploadItems from "./components/UploadItems";
 import FavCart from "./components/FavCart";
-import MyAccount from "./components/MyAccount";
 import axios from "axios";
 import { getCurrentUserName } from "./utils";
 import ChatBox from "./components/ChatBox";
@@ -34,6 +41,12 @@ function App() {
   const [region, setRegion] = useState("");
   const [isLocationReady, setIsLocationReady] = useState(false);
   const [headerBg, setHeaderBg] = useState(false);
+  const [isAccountModalVisible, setIsAccountModalVisible] = useState(false);
+  const [location, setLocation] = useState("");
+  const [isUsernameEditMode, setIsUsernameEditMode] = useState(false);
+  const [isPasswordEditMode, setIsPasswordEditMode] = useState(false);
+  const [isLocationEditMode, setIsLocationEditMode] = useState(false);
+  const [editedUsername, setEditedUsername] = useState("");
 
   //collapsed
   const [collapsed, setCollapsed] = useState(false);
@@ -74,6 +87,8 @@ function App() {
     getCurrentUserName()
       .then((data) => {
         setUsername(data.username);
+        setLocation(data.location);
+        setEditedUsername(data.username);
       })
       .catch((err) => {
         // message.error(err.message);
@@ -129,6 +144,24 @@ function App() {
   };
 
   const userMenuLogout = () => {
+    const editButtonStyle = {
+      color: "green", // Set the color to green
+      border: "none", // Remove the border
+      outline: "none", // Remove the outline when focused
+      background: "none", // Remove any background color
+      cursor: "pointer", // Show cursor as pointer when hovering
+    };
+    const handleUsernameEditClick = () => {
+      setIsUsernameEditMode(true);
+    };
+
+    const handlePasswordEditClick = () => {
+      setIsPasswordEditMode(true);
+    };
+
+    const handleLocationEditClick = () => {
+      setIsLocationEditMode(true);
+    };
     const menuStyle = {
       borderRadius: "10px",
       background: "#f2f2f2",
@@ -145,10 +178,177 @@ function App() {
     return (
       <Menu style={menuStyle}>
         <Menu.Item style={menuItemStyle}>
-          <Logout handleLogout={handleLogOut} />
+          <Button onClick={handleLogOut} type="primary" shape="round">
+            Logout
+          </Button>
         </Menu.Item>
         <Menu.Item style={menuItemStyle}>
-          <MyAccount />
+          <Button
+            type="primary"
+            shape="round"
+            onClick={() => setIsAccountModalVisible(true)}
+          >
+            Profile
+          </Button>
+          <Modal
+            title={<h2 style={{ fontSize: "18px" }}>Account Detail</h2>}
+            open={isAccountModalVisible}
+            onCancel={() => setIsAccountModalVisible(false)}
+            footer={[
+              <Button
+                key="cancel"
+                onClick={() => setIsAccountModalVisible(false)}
+              >
+                Cancel
+              </Button>,
+            ]}
+          >
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "12px" }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  fontSize: "18px",
+                }}
+              >
+                <span>Username:</span>
+                {isUsernameEditMode ? (
+                  <input
+                    type="text"
+                    value={editedUsername}
+                    onChange={(e) => setEditedUsername(e.target.value)}
+                    style={{
+                      fontSize: "18px", // Increase font size
+                      padding: "5px", // Add padding
+                      borderRadius: "5px", // Add rounded corners
+                    }}
+                  />
+                ) : (
+                  <span>{username}</span>
+                )}
+                {!isUsernameEditMode ? (
+                  <button
+                    onClick={handleUsernameEditClick}
+                    style={editButtonStyle}
+                  >
+                    Edit
+                  </button>
+                ) : (
+                  <div>
+                    <button
+                      onClick={() => setIsUsernameEditMode(false)}
+                      style={editButtonStyle}
+                    >
+                      cancel
+                    </button>
+                    <button
+                      onClick={() => setIsUsernameEditMode(false)}
+                      style={editButtonStyle}
+                    >
+                      save
+                    </button>
+                  </div>
+                )}
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  fontSize: "18px",
+                }}
+              >
+                <span>Password:</span>
+                {isPasswordEditMode ? (
+                  <input
+                    type="password"
+                    // value={editedPassword}
+                    // onChange={(e) => setEditedPassword(e.target.value)}
+                    style={{
+                      fontSize: "18px", // Increase font size
+                      padding: "5px", // Add padding
+                      borderRadius: "5px", // Add rounded corners
+                    }}
+                  />
+                ) : (
+                  <span>*****</span>
+                )}
+                {!isPasswordEditMode ? (
+                  <button
+                    onClick={handlePasswordEditClick}
+                    style={editButtonStyle}
+                  >
+                    Edit
+                  </button>
+                ) : (
+                  <div>
+                    <button
+                      onClick={() => setIsPasswordEditMode(false)}
+                      style={editButtonStyle}
+                    >
+                      cancel
+                    </button>
+                    <button
+                      onClick={() => setIsPasswordEditMode(false)}
+                      style={editButtonStyle}
+                    >
+                      save
+                    </button>
+                  </div>
+                )}
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  fontSize: "18px",
+                }}
+              >
+                <span>Location:</span>
+                {isLocationEditMode ? (
+                  <input
+                    type="text"
+                    value={location}
+                    // onChange={(e) => setEditedLocation(e.target.value)}
+                    style={{
+                      fontSize: "18px", // Increase font size
+                      padding: "5px", // Add padding
+                      borderRadius: "5px", // Add rounded corners
+                    }}
+                  />
+                ) : (
+                  <span>{location}</span>
+                )}
+                {!isLocationEditMode ? (
+                  <button
+                    onClick={handleLocationEditClick}
+                    style={editButtonStyle}
+                  >
+                    Edit
+                  </button>
+                ) : (
+                  <div>
+                    <button
+                      onClick={() => setIsLocationEditMode(false)}
+                      style={editButtonStyle}
+                    >
+                      cancel
+                    </button>
+                    <button
+                      onClick={() => setIsLocationEditMode(false)}
+                      style={editButtonStyle}
+                    >
+                      save
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </Modal>
         </Menu.Item>
       </Menu>
     );
