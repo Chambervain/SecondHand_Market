@@ -105,31 +105,9 @@ class UnauthedDetailPage extends React.Component {
   ////////////////////////////////////////////////////RENDER HEAD CONTENT//////////////////////////////////////////////////////
   renderHeaderContent = () => {
     return (
-      <Header
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          backgroundColor: "#800000",
-        }}
-      >
+      <Header className="header_new">
         <Link to={`/`}>
-          <div
-            style={{
-              width: 1100,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: 60,
-            }}
-          >
-            <Button
-              type="text"
-              style={{
-                color: "white",
-              }}
-              icon={<HomeOutlined style={{ fontSize: 25 }} />}
-            />
-          </div>
+          <div className="header_title">LETGO</div>
         </Link>
       </Header>
     );
@@ -168,7 +146,7 @@ class UnauthedDetailPage extends React.Component {
     return (
       <Layout>
         {this.renderHeaderContent()}
-        <Content>
+        <Content style={{ marginTop: "50px" }}>
           <ProCard split="vertical">
             <ProCard headerBordered colSpan="70%">
               <Breadcrumb separator=">">
@@ -184,7 +162,7 @@ class UnauthedDetailPage extends React.Component {
               <div style={{ width: 900 }}>
                 <div
                   style={{
-                    border: "1px solid",
+                    border: "none",
                     borderColor: "rgb(211, 211, 211)",
                   }}
                 >
@@ -234,7 +212,6 @@ class UnauthedDetailPage extends React.Component {
             </ProCard>
             <ProCard>
               <div style={{ height: 22 }}></div>
-              <Divider />
               <Space direction="vertical">
                 <div>
                   <h2 style={{ fontSize: 35, fontWeight: "bold" }}>
@@ -245,11 +222,11 @@ class UnauthedDetailPage extends React.Component {
                       ${item_price}
                     </p>
                   </div>
-                  <p style={{ fontSize: 20 }}>
+                  <p style={{ fontSize: 15 }}>
                     Lasted Posted on {item_posted_day}
                   </p>
-                  <p style={{ fontSize: 20 }}>Condition: {item_condition}</p>
-                  <p style={{ fontSize: 20 }}>Category: {item_category}</p>
+                  <p style={{ fontSize: 15 }}>Condition: {item_condition}</p>
+                  <p style={{ fontSize: 15 }}>Category: {item_category}</p>
                 </div>
                 <div>
                   <div
@@ -271,7 +248,6 @@ class UnauthedDetailPage extends React.Component {
               size="large"
               style={{ fontSize: 30 }}
             >
-              <Divider />
               <div style={{ fontSize: 25, fontWeight: "bolder" }}>
                 Descriptions
               </div>

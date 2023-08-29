@@ -40,9 +40,9 @@ const FavCart = ({ username }) => {
       <Button
         type="text"
         style={{
-          color: "white",
+          color: "black",
         }}
-        icon={<HeartOutlined style={{ fontSize: 23 }} />}
+        icon={<HeartOutlined style={{ fontSize: 20 }} />}
         onClick={openDrawer}
       />
       <Drawer

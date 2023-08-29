@@ -9,6 +9,10 @@ const ModifyButton = ({ item, handleModifySuccess }) => {
   const openModal = () => {
     setModalVisible(true);
   };
+  const handleModify = () => {
+    handleModifySuccess();
+    setModalVisible(false);
+  };
 
   return (
     <>
@@ -18,7 +22,7 @@ const ModifyButton = ({ item, handleModifySuccess }) => {
           <Modal
             title="Modify"
             centered={true}
-            visible={modalVisible}
+            open={modalVisible}
             closable={true}
             footer={null}
             onCancel={() => {
@@ -26,10 +30,7 @@ const ModifyButton = ({ item, handleModifySuccess }) => {
             }}
             destroyOnClose={true}
           >
-            <ModificationForm
-              item={item}
-              handleModifySuccess={handleModifySuccess}
-            />
+            <ModificationForm item={item} handleModifySuccess={handleModify} />
           </Modal>
         )}
       </Tooltip>

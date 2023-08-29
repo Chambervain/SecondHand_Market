@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Form, Button, Input, InputNumber, Select, message } from "antd";
 import { useState } from "react";
-import { modifyItem } from "../utils";
+import { modifyItem, getItemById } from "../utils";
 
 const layout = {
   labelCol: { span: 5 },
@@ -11,6 +11,20 @@ const layout = {
 const ModificationForm = ({ item, handleModifySuccess }) => {
   console.log(item);
   const [loading, setLoading] = useState(false);
+  const [data, setData] = useState(item);
+  useEffect(() => {
+    getItemById(item.item_id)
+      .then((data) => {
+        setData(data);
+      })
+      .catch((err) => {
+        // avoid annoying error message
+        // message.error(err.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
 
   const fileInputRef = React.createRef();
 
@@ -57,7 +71,7 @@ const ModificationForm = ({ item, handleModifySuccess }) => {
         name="name"
         label="name"
         rules={[{ required: true }]}
-        initialValue={item.item_name}
+        initialValue={data.item_name}
       >
         <Input name="name" />
       </Form.Item>
@@ -65,7 +79,7 @@ const ModificationForm = ({ item, handleModifySuccess }) => {
         name="price"
         label="price"
         rules={[{ required: true }]}
-        initialValue={item.item_price}
+        initialValue={data.item_price}
       >
         <InputNumber addonAfter="$" />
       </Form.Item>
@@ -73,14 +87,14 @@ const ModificationForm = ({ item, handleModifySuccess }) => {
         name="description"
         label="description"
         rules={[{ required: true }]}
-        initialValue={item.item_description}
+        initialValue={data.item_description}
       >
         <Input.TextArea name="description" />
       </Form.Item>
       <Form.Item
         name="condition"
         label="condition"
-        initialValue={item.item_condition}
+        initialValue={data.item_condition}
       >
         <Select>
           <Select.Option value="New With Tags (NWT)">
@@ -101,7 +115,7 @@ const ModificationForm = ({ item, handleModifySuccess }) => {
         name="category"
         label="category"
         rules={[{ required: true }]}
-        initialValue={item.item_category}
+        initialValue={data.item_category}
       >
         <Select>
           <Select.Option value="Clothing">Clothing</Select.Option>
